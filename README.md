@@ -48,10 +48,10 @@ sudo usermod -aG docker ${USER}
 	- [Сайт 1cFresh 1.2.34.22](https://releases.1c.ru/version_file?nick=FreshPublic&ver=1.0.51.1&path=FreshSite%5c1_2_34_22%5cExtrafiles%5csite_1.2.34_22.zip "Сайт 1cFresh 1.2.34.22")
 	- [Форум 1cFresh 1.0.45.4](https://releases.1c.ru/version_file?nick=FreshPublic&ver=1.0.51.1&path=Forum%5c1_0_45_4%5cforum_1.0.45_4.zip "Форум 1cFresh 1.0.45.4")
 	- [Шлюз приложений 1.1.3.1 для DEB-based Linux-систем ](https://releases.1c.ru/version_file?nick=FreshPublic&ver=1.0.51.1&path=ServiceGate%5c1_1_3_1%5cappgate_1.1.3_1.zip "Шлюз приложений 1.1.3.1 для DEB-based Linux-систем ")
-	- [Менеджер сервиса. Версия 1.0.94.20](https://releases.1c.ru/version_file?nick=FreshPublic&ver=1.0.28.1&path=SM\1_0_94_20\SM_1_0_94_20_setup1c.exe "Менеджер сервиса. Версия 1.0.94.20")
-	- [Агент сервиса. Версия 1.0.29.4](https://releases.1c.ru/version_file?nick=FreshPublic&ver=1.0.28.1&path=SA\1_0_29_4\SA_1_0_29_4_setup1c.exe "Агент сервиса. Версия 1.0.29.4")
-	- [Менеджер доступности. Версия 1.0.3.4](https://releases.1c.ru/version_file?nick=FreshPublic&ver=1.0.28.1&path=AM\1_0_3_4\AM_1_0_3_4_setup1c.exe "Менеджер доступности. Версия 1.0.3.4")
-- [1С:Библиотека технологии сервиса, редакция 1.2. Версия 1.2.2.26](https://releases.1c.ru/version_files?nick=SMTL12&ver=1.2.2.26 "1С:Библиотека технологии сервиса, редакция 1.2. Версия 1.2.2.26")  
+	- [Менеджер сервиса. Версия 1.1.54.15](https://releases.1c.ru/version_file?nick=FreshPublic&ver=1.0.51.1&path=SM%5c1_1_54_15%5cSM_1_1_54_15_setup1c.zip "Менеджер сервиса. Версия 1.1.54.15")
+	- [Агент сервиса. Версия 1.1.54.1](https://releases.1c.ru/version_file?nick=FreshPublic&ver=1.0.51.1&path=SA%5c1_1_54_1%5cSA_1_1_54_1_setup1c.zip "Агент сервиса. Версия 1.1.54.1")
+	- [Менеджер доступности. Версия 1.1.2.1](https://releases.1c.ru/version_file?nick=FreshPublic&ver=1.0.51.1&path=AM%5c1_1_2_1%5cAM_1_1_2_1_setup.zip "Менеджер доступности. Версия 1.1.2.1")
+- [1С:Библиотека технологии сервиса, редакция 2.1. Версия 2.1.1.38](https://releases.1c.ru/version_files?nick=SMTL21&ver=2.1.1.38 "1С:Библиотека технологии сервиса, редакция 2.1. Версия 2.1.1.38")  
 
 ##### Для версий платформ начиная с 8.3.20
 Необходимо также [скачать](https://releases.1c.ru/project/EnterpriseLicenseTools) и разместить архив с утилитой лицензирования в каталог `/docker_fresh/distr/`
