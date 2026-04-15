@@ -53,7 +53,7 @@ sudo usermod -aG docker ${USER}
 	- [Агент сервиса. Версия 1.1.54.1](https://releases.1c.ru/version_file?nick=FreshPublic&ver=1.0.51.1&path=SA%5c1_1_54_1%5cSA_1_1_54_1_setup1c.zip "Агент сервиса. Версия 1.1.54.1")
 	- [Управление службой поддержки. Версия 1.0.82.1](https://releases.1c.ru/version_file?nick=FreshPublic&ver=1.0.51.1&path=SDM%5c1_0_82_1%5cSDM_1_0_82_1_setup1c.zip "Управление службой поддержки. Версия 1.0.82.1")
 	- [Менеджер доступности. Версия 1.1.2.1](https://releases.1c.ru/version_file?nick=FreshPublic&ver=1.0.51.1&path=AM%5c1_1_2_1%5cAM_1_1_2_1_setup.zip "Менеджер доступности. Версия 1.1.2.1")
-	- [Демо приложение "Работа в модели сервиса", версия 2.1.1.37](https://releases.1c.ru/version_file?nick=FreshPublic&ver=1.0.51.1&path=SDemo%5c2_1_1_37%5cSDEMO_2_1_1_37_setup.zip "Демо приложение "Работа в модели сервиса", версия 2.1.1.37")
+	- [Демо приложение "Работа в модели сервиса", версия 2.1.1.37](https://releases.1c.ru/version_file?nick=FreshPublic&ver=1.0.51.1&path=SDemo%5c2_1_1_37%5cSDEMO_2_1_1_37_setup.zip "Демо приложение 'Работа в модели сервиса', версия 2.1.1.37")
 	- [Страница недоступности, версия 1.1.8.4](https://releases.1c.ru/version_file?nick=FreshPublic&ver=1.0.51.1&path=FreshInaccessibilityInfoPage%5c1_1_8_4%5cunavailability_page_1.1.8_4.zip "Страница недоступности, версия 1.1.8.4")
 	- [Сервер исполнителя скриптов подсистемы 1С:Фреш, версия 4.4](https://releases.1c.ru/version_file?nick=FreshPublic&ver=1.0.51.1&path=FreshPublic%5c1_0_51_1%5cexecutor_server_4.4.zip "Сервер исполнителя скриптов подсистемы 1С:Фреш, версия 4.4")
 	- [Приложение 1С:Шины, версия 1.9](https://releases.1c.ru/version_file?nick=FreshPublic&ver=1.0.51.1&path=FreshPublic%5c1_0_48_1%5cfreshbus_1.9.zip "Приложение 1С:Шины, версия 1.9")
