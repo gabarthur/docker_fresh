@@ -38,6 +38,7 @@ sudo usermod -aG docker ${USER}
 	- Конфигурация **Менеджер сервиса**
 	- Конфигурация **Агент сервиса**
 	- Конфигурация **Менеджер доступности**
+	- Конфигурация **Управление службой поддержки**
 - [1С:Библиотека технологии сервиса, редакция 1.2](https://releases.1c.ru/version_files?nick=SMTL12&ver=1.2.2.26 "1С:Библиотека технологии сервиса, редакция 1.2") или [1С:Библиотека технологии сервиса, редакция 2.0](https://releases.1c.ru/project/SMTL20 "1С:Библиотека технологии сервиса, редакция 2.0")
 
 ##### Компоненты используемые для тестирования
@@ -50,7 +51,12 @@ sudo usermod -aG docker ${USER}
 	- [Шлюз приложений 1.1.3.1 для DEB-based Linux-систем ](https://releases.1c.ru/version_file?nick=FreshPublic&ver=1.0.51.1&path=ServiceGate%5c1_1_3_1%5cappgate_1.1.3_1.zip "Шлюз приложений 1.1.3.1 для DEB-based Linux-систем ")
 	- [Менеджер сервиса. Версия 1.1.54.15](https://releases.1c.ru/version_file?nick=FreshPublic&ver=1.0.51.1&path=SM%5c1_1_54_15%5cSM_1_1_54_15_setup1c.zip "Менеджер сервиса. Версия 1.1.54.15")
 	- [Агент сервиса. Версия 1.1.54.1](https://releases.1c.ru/version_file?nick=FreshPublic&ver=1.0.51.1&path=SA%5c1_1_54_1%5cSA_1_1_54_1_setup1c.zip "Агент сервиса. Версия 1.1.54.1")
+	- [Управление службой поддержки. Версия 1.0.82.1](https://releases.1c.ru/version_file?nick=FreshPublic&ver=1.0.51.1&path=SDM%5c1_0_82_1%5cSDM_1_0_82_1_setup1c.zip "Управление службой поддержки. Версия 1.0.82.1")
 	- [Менеджер доступности. Версия 1.1.2.1](https://releases.1c.ru/version_file?nick=FreshPublic&ver=1.0.51.1&path=AM%5c1_1_2_1%5cAM_1_1_2_1_setup.zip "Менеджер доступности. Версия 1.1.2.1")
+	- [Демо приложение "Работа в модели сервиса", версия 2.1.1.37](https://releases.1c.ru/version_file?nick=FreshPublic&ver=1.0.51.1&path=SDemo%5c2_1_1_37%5cSDEMO_2_1_1_37_setup.zip "Демо приложение "Работа в модели сервиса", версия 2.1.1.37")
+	- [Страница недоступности, версия 1.1.8.4](https://releases.1c.ru/version_file?nick=FreshPublic&ver=1.0.51.1&path=FreshInaccessibilityInfoPage%5c1_1_8_4%5cunavailability_page_1.1.8_4.zip "Страница недоступности, версия 1.1.8.4")
+	- [Сервер исполнителя скриптов подсистемы 1С:Фреш, версия 4.4](https://releases.1c.ru/version_file?nick=FreshPublic&ver=1.0.51.1&path=FreshPublic%5c1_0_51_1%5cexecutor_server_4.4.zip "Сервер исполнителя скриптов подсистемы 1С:Фреш, версия 4.4")
+	- [Приложение 1С:Шины, версия 1.9](https://releases.1c.ru/version_file?nick=FreshPublic&ver=1.0.51.1&path=FreshPublic%5c1_0_48_1%5cfreshbus_1.9.zip "Приложение 1С:Шины, версия 1.9")
 - [1С:Библиотека технологии сервиса, редакция 2.1. Версия 2.1.1.38](https://releases.1c.ru/version_files?nick=SMTL21&ver=2.1.1.38 "1С:Библиотека технологии сервиса, редакция 2.1. Версия 2.1.1.38")  
 
 ##### Для версий платформ начиная с 8.3.20
