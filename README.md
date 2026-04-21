@@ -56,7 +56,7 @@ sudo usermod -aG docker ${USER}
 	- [Демо приложение "Работа в модели сервиса", версия 2.1.1.37](https://releases.1c.ru/version_file?nick=FreshPublic&ver=1.0.51.1&path=SDemo%5c2_1_1_37%5cSDEMO_2_1_1_37_setup.zip "Демо приложение 'Работа в модели сервиса', версия 2.1.1.37")
 	- [Страница недоступности, версия 1.1.8.4](https://releases.1c.ru/version_file?nick=FreshPublic&ver=1.0.51.1&path=FreshInaccessibilityInfoPage%5c1_1_8_4%5cunavailability_page_1.1.8_4.zip "Страница недоступности, версия 1.1.8.4")
 	- [Сервер исполнителя скриптов подсистемы 1С:Фреш, версия 4.4](https://releases.1c.ru/version_file?nick=FreshPublic&ver=1.0.51.1&path=FreshPublic%5c1_0_51_1%5cexecutor_server_4.4.zip "Сервер исполнителя скриптов подсистемы 1С:Фреш, версия 4.4")
-	- [Приложение 1С:Шины, версия 1.9](https://releases.1c.ru/version_file?nick=FreshPublic&ver=1.0.51.1&path=FreshPublic%5c1_0_48_1%5cfreshbus_1.9.zip "Приложение 1С:Шины, версия 1.9")
+	- [Приложение 1С:Шины, версия 1.9](https://releases.1c.ru/version_file?nick=FreshPublic&ver=1.0.51.1&path=FreshPublic%5c1_0_48_1%5cfreshbus_1.9.zip "Приложение 1С:Шины, версия 1.9") 
 - [1С:Библиотека технологии сервиса, редакция 2.1. Версия 2.1.1.38](https://releases.1c.ru/version_files?nick=SMTL21&ver=2.1.1.38 "1С:Библиотека технологии сервиса, редакция 2.1. Версия 2.1.1.38")  
 
 ##### Для версий платформ начиная с 8.3.20
