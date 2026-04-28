@@ -53,7 +53,9 @@ necessary_components = [
     rf"^.*Сервер взаимодействия \(64-bit\).*{OS_TYPE}.*$",
     rf"^.*Сервер 1С:Шины со средой разработки для ОС.*{OS_TYPE}.*$",
     rf"^.*Дистрибутив СУБД PostgreSQL для {OS_NAME} {OS_VERSION} {OS_ARCHITECTURE} (64-bit) одним архивом (ручная установка).*$",
-    r"^Полный дистрибутив$"
+    r"^Полный дистрибутив$",
+    r"^Клиент 1С:Предприятия \(64-bit\) для RPM-based Linux-систем$",
+    r"^Сервер 1С:Предприятия \(64-bit\) для RPM-based Linux-систем$"
 ]
 
 def login_1c(username: str, password: str) -> bool:
@@ -186,6 +188,11 @@ if __name__ == "__main__":
     username = input("Введите логин (обычно email): ").strip()
     password = getpass.getpass("Введите пароль: ")
     print("=== Указание версий компонентов ===")
+    platform_version = input("Введите версию платформы 1С:Предприятия 8.5 (оставьте пустым, чтобы использовать версию по умолчанию): ").strip()
+    if platform_version == "":
+        platform_version = "8.5.1.1302"
+    platform_page = f"{BASE_URL}/version_files?nick=Platform85&ver={platform_version}"
+
     technology_version = input("Введите версию облачной подсистемы Фреш (оставьте пустым, чтобы использовать версию по умолчанию): ").strip()
     if technology_version == "":
         technology_version = "1.0.51.1"
@@ -220,6 +227,14 @@ if __name__ == "__main__":
         print("Авторизация не удалась.")
         input("Нажмите Enter для выхода...")
         sys.exit(1)
+
+    platform_urls = get_urls_from_page(platform_page)
+    for name, url in platform_urls.items():
+        download_url = get_direct_download_url(BASE_URL + url)
+        if download_url:
+            print(f"Скачиваем компонент: {name}")
+            download_file(download_url)
+        time.sleep(DELAY_BETWEEN_DOWNLOADS)
 
     technology_urls = get_urls_from_page(technology_page)
     for name, url in technology_urls.items():
