@@ -14,7 +14,7 @@ if OS_TYPE == "Linux":
     OS_NAME = platform.version()
 OS_ARCHITECTURE = platform.machine()
 
-OS_TYPE = "Linux"             #УДАЛИТЬ!!!
+OS_TYPE = "Windows"             #УДАЛИТЬ!!!
 OS_NAME = "Ubuntu"            #УДАЛИТЬ!!!
 OS_VERSION = "22.04"          #УДАЛИТЬ!!!
 #if OS_NAME == "other":
@@ -52,7 +52,8 @@ necessary_components = [
     r"^.*Дистрибутив 1С:Исполнитель \(U\).*$",
     rf"^.*Сервер взаимодействия \(64-bit\).*{OS_TYPE}.*$",
     rf"^.*Сервер 1С:Шины со средой разработки для ОС.*{OS_TYPE}.*$",
-    rf"^.*Дистрибутив СУБД PostgreSQL для {OS_NAME} {OS_VERSION} {OS_ARCHITECTURE} (64-bit) одним архивом (ручная установка).*$"
+    rf"^.*Дистрибутив СУБД PostgreSQL для {OS_NAME} {OS_VERSION} {OS_ARCHITECTURE} (64-bit) одним архивом (ручная установка).*$",
+    r"^Полный дистрибутив$"
 ]
 
 def login_1c(username: str, password: str) -> bool:
@@ -205,10 +206,15 @@ if __name__ == "__main__":
         bus_version = "7.1.7"
     bus_page = f"{BASE_URL}/version_files?nick=esb&ver={bus_version}"
 
-    postgre_version = input("Введите версию PostgreSQL (оставьте пустым, чтобы использовать версию по умолчанию): ").strip()
+    smtl_version = input("Введите версию 1С:Библиотека технологии сервиса (оставьте пустым, чтобы использовать версию по умолчанию): ").strip()
+    if smtl_version == "":
+        smtl_version = "2.1.1.38"
+    smtl_page = f"{BASE_URL}/version_files?nick=SMTL21&ver={smtl_version}"
+
+    '''postgre_version = input("Введите версию PostgreSQL (оставьте пустым, чтобы использовать версию по умолчанию): ").strip()
     if postgre_version == "":
         postgre_version = "17.8-1.1C"
-    postgre_page = f"{BASE_URL}/version_files?nick=PostgreSQL&ver={postgre_version}"
+    postgre_page = f"{BASE_URL}/version_files?nick=PostgreSQL&ver={postgre_version}"'''
 
     if not login_1c(username, password):
         print("Авторизация не удалась.")
@@ -241,6 +247,14 @@ if __name__ == "__main__":
 
     bus_urls = get_urls_from_page(bus_page)
     for name, url in bus_urls.items():
+        download_url = get_direct_download_url(BASE_URL + url)
+        if download_url:
+            print(f"Скачиваем компонент: {name}")
+            download_file(download_url)
+        time.sleep(DELAY_BETWEEN_DOWNLOADS)
+
+    smtl_urls = get_urls_from_page(smtl_page)
+    for name, url in smtl_urls.items():
         download_url = get_direct_download_url(BASE_URL + url)
         if download_url:
             print(f"Скачиваем компонент: {name}")
