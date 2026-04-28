@@ -55,7 +55,8 @@ necessary_components = [
     r"^.*Дистрибутив СУБД PostgreSQL для CentOS 7 x86 \(64-bit\) одним архивом \(ручная установка\).*$",
     r"^Полный дистрибутив$",
     r"^Клиент 1С:Предприятия \(64-bit\) для RPM-based Linux-систем$",
-    r"^Сервер 1С:Предприятия \(64-bit\) для RPM-based Linux-систем$"
+    r"^Сервер 1С:Предприятия \(64-bit\) для RPM-based Linux-систем$",
+    r"^Утилита лицензирования 1С:Предприятия для Linux \(64-bit\)$"
 ]
 
 def login_1c(username: str, password: str) -> bool:
@@ -180,6 +181,36 @@ def download_file(url: str):
     except Exception as e:
         print("Ошибка скачивания:", e)
 
+def download_components_from_page(page_url: str, component_name: str = "компонент"):
+    print(f"\n=== Обработка {component_name} ===")
+    print(f"Страница: {page_url}")
+    
+    try:
+        urls = get_urls_from_page(page_url)
+        
+        if not urls:
+            print(f"Не найдено подходящих файлов на странице {page_url}")
+            return
+        
+        print(f"Найдено файлов для скачивания: {len(urls)}")
+        
+        for name, url in urls.items():
+            try:
+                download_url = get_direct_download_url(BASE_URL + url)
+                if download_url:
+                    print(f"Скачиваем компонент: {name}")
+                    download_file(download_url)
+                else:
+                    print(f"Не удалось получить прямую ссылку скачивания для: {name}")
+            except Exception as e:
+                print(f"Ошибка при обработке файла '{name}': {e}")
+            
+            time.sleep(DELAY_BETWEEN_DOWNLOADS)
+            
+    except Exception as e:
+        print(f"КРИТИЧЕСКАЯ ОШИБКА при обработке группы '{component_name}': {e}")
+        print("Продолжаем обработку следующих групп компонентов...\n")
+
 if __name__ == "__main__":
     import urllib3
     urllib3.disable_warnings(urllib3.exceptions.NotOpenSSLWarning)
@@ -188,98 +219,21 @@ if __name__ == "__main__":
     username = input("Введите логин (обычно email): ").strip()
     password = getpass.getpass("Введите пароль: ")
     print("=== Указание версий компонентов ===")
-    platform_version = input("Введите версию платформы 1С:Предприятия 8.5 (оставьте пустым, чтобы использовать версию по умолчанию): ").strip()
-    if platform_version == "":
-        platform_version = "8.5.1.1302"
-    platform_page = f"{BASE_URL}/version_files?nick=Platform85&ver={platform_version}"
+    from components_config import COMPONENTS
 
-    technology_version = input("Введите версию облачной подсистемы Фреш (оставьте пустым, чтобы использовать версию по умолчанию): ").strip()
-    if technology_version == "":
-        technology_version = "1.0.51.1"
-    technology_page = f"{BASE_URL}/version_files?nick=FreshPublic&ver={technology_version}"
-
-    script_version = input("Введите версию 1С:Предприятие.Элемент Скрипт (оставьте пустым, чтобы использовать версию по умолчанию): ").strip()
-    if script_version == "":
-        script_version = "3.0.2.2"
-    script_page = f"{BASE_URL}/version_files?nick=Script&ver={script_version}"
-
-    collaboration_system_version = input("Введите версию 1С:Сервер Взаимодействия (оставьте пустым, чтобы использовать версию по умолчанию): ").strip()
-    if collaboration_system_version == "":
-        collaboration_system_version = "27.0.42"
-    collaboration_system_page = f"{BASE_URL}/version_files?nick=CollaborationSystem&ver={collaboration_system_version}"
-
-    bus_version = input("Введите версию 1С:Шина (оставьте пустым, чтобы использовать версию по умолчанию): ").strip()
-    if bus_version == "":
-        bus_version = "7.1.7"
-    bus_page = f"{BASE_URL}/version_files?nick=esb&ver={bus_version}"
-
-    smtl_version = input("Введите версию 1С:Библиотека технологии сервиса (оставьте пустым, чтобы использовать версию по умолчанию): ").strip()
-    if smtl_version == "":
-        smtl_version = "2.1.1.38"
-    smtl_page = f"{BASE_URL}/version_files?nick=SMTL21&ver={smtl_version}"
-
-    postgre_version = input("Введите версию PostgreSQL (оставьте пустым, чтобы использовать версию по умолчанию): ").strip()
-    if postgre_version == "":
-        postgre_version = "17.8-1.1C"
-    postgre_page = f"{BASE_URL}/version_files?nick=AddCompPostgre&ver={postgre_version}"
+    component_pages = []
+    for comp in COMPONENTS:
+        version = input(f"Введите версию {comp['name']} (оставьте пустым для значения по умолчанию '{comp['version']}'): ").strip()
+        if version == "":
+            version = comp['version']
+        
+        page_url = f"{BASE_URL}/version_files?nick={comp['nick']}&ver={version}"
+        component_pages.append((page_url, comp['name']))
 
     if not login_1c(username, password):
         print("Авторизация не удалась.")
         input("Нажмите Enter для выхода...")
         exit(1)
 
-    platform_urls = get_urls_from_page(platform_page)
-    for name, url in platform_urls.items():
-        download_url = get_direct_download_url(BASE_URL + url)
-        if download_url:
-            print(f"Скачиваем компонент: {name}")
-            download_file(download_url)
-        time.sleep(DELAY_BETWEEN_DOWNLOADS)
-
-    technology_urls = get_urls_from_page(technology_page)
-    for name, url in technology_urls.items():
-        download_url = get_direct_download_url(BASE_URL + url)
-        if download_url:
-            print(f"Скачиваем компонент: {name}")
-            download_file(download_url)
-        time.sleep(DELAY_BETWEEN_DOWNLOADS)
-
-    script_urls = get_urls_from_page(script_page)
-    for name, url in script_urls.items():
-        download_url = get_direct_download_url(BASE_URL + url)
-        if download_url:
-            print(f"Скачиваем компонент: {name}")
-            download_file(download_url)
-        time.sleep(DELAY_BETWEEN_DOWNLOADS)
-
-    collaboration_system_urls = get_urls_from_page(collaboration_system_page)
-    for name, url in collaboration_system_urls.items():
-        download_url = get_direct_download_url(BASE_URL + url)
-        if download_url:
-            print(f"Скачиваем компонент: {name}")
-            download_file(download_url)
-        time.sleep(DELAY_BETWEEN_DOWNLOADS)
-
-    bus_urls = get_urls_from_page(bus_page)
-    for name, url in bus_urls.items():
-        download_url = get_direct_download_url(BASE_URL + url)
-        if download_url:
-            print(f"Скачиваем компонент: {name}")
-            download_file(download_url)
-        time.sleep(DELAY_BETWEEN_DOWNLOADS)
-
-    smtl_urls = get_urls_from_page(smtl_page)
-    for name, url in smtl_urls.items():
-        download_url = get_direct_download_url(BASE_URL + url)
-        if download_url:
-            print(f"Скачиваем компонент: {name}")
-            download_file(download_url)
-        time.sleep(DELAY_BETWEEN_DOWNLOADS)
-
-    postgre_urls = get_urls_from_page(postgre_page)
-    for name, url in postgre_urls.items():
-        download_url = get_direct_download_url(BASE_URL + url)
-        if download_url:
-            print(f"Скачиваем компонент: {name}")
-            download_file(download_url)
-        time.sleep(DELAY_BETWEEN_DOWNLOADS)
+    for page_url, component_name in component_pages:
+        download_components_from_page(page_url, component_name)

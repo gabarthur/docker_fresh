@@ -5,6 +5,7 @@ from datetime import datetime
 
 import modules.site as site
 import modules.centos as centos
+import modules.debian as debian
 import modules.db as db
 import modules.forum as forum
 import modules.core as core
@@ -22,7 +23,7 @@ def get_docker_image_command():
         return ['docker images']
 
 def image_exist(image_name):
-    full_image_name = 'fresh/' + image.name
+    full_image_name = 'fresh/' + image_name
     result = subprocess.run(get_docker_image_command(), shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     
     return full_image_name in str(result.stdout)
@@ -35,7 +36,8 @@ else:
 is_new_path_to_platform = int(platform_ver.split('.')[2]) >= 20
 
 images = []
-images.append(centos.New())
+#images.append(centos.New())
+images.append(debian.New())
 images.append(db.New())
 images.append(site.New())
 images.append(forum.New())
@@ -73,6 +75,7 @@ for image in images:
         command_to_run.append('images/' + image.name + '/Dockerfile_20')
         command_to_run.append('--build-arg')
         command_to_run.append('DISTR_VERSION=' + platform_ver)
+    
     command_to_run.append('images/' + image.name)
 
     result = subprocess.run(command_to_run, stdout=stdout, stderr=stderr)
