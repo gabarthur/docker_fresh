@@ -7,7 +7,7 @@ from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 import platform
 
-OS_TYPE = ("Windows" if platform.system() == "Windows"
+'''OS_TYPE = ("Windows" if platform.system() == "Windows"
            else "Linux" if platform.system() == "Linux"
            else "other")
 if OS_TYPE == "Linux":
@@ -19,7 +19,7 @@ OS_NAME = "Ubuntu"            #УДАЛИТЬ!!!
 OS_VERSION = "22.04"          #УДАЛИТЬ!!!
 #if OS_NAME == "other":
 #    print("Установка на данной ОС не поддерживается. Завершение...")
-#    sys.exit(1)
+#    exit(1)'''
 
 DOWNLOAD_DIR = "distr"
 
@@ -50,9 +50,9 @@ necessary_components = [
     r"^Сервер исполнителя скриптов подсистемы 1С:Фреш, версия .*$",
     r"^Приложение 1С:Шины, версия .*$",
     r"^.*Дистрибутив 1С:Исполнитель \(U\).*$",
-    rf"^.*Сервер взаимодействия \(64-bit\).*{OS_TYPE}.*$",
-    rf"^.*Сервер 1С:Шины со средой разработки для ОС.*{OS_TYPE}.*$",
-    rf"^.*Дистрибутив СУБД PostgreSQL для {OS_NAME} {OS_VERSION} {OS_ARCHITECTURE} (64-bit) одним архивом (ручная установка).*$",
+    r"^.*Сервер взаимодействия \(64-bit\) Linux$",
+    r"^.*Сервер 1С:Шины со средой разработки для ОС Linux$",
+    r"^.*Дистрибутив СУБД PostgreSQL для CentOS 7 x86 \(64-bit\) одним архивом \(ручная установка\).*$",
     r"^Полный дистрибутив$",
     r"^Клиент 1С:Предприятия \(64-bit\) для RPM-based Linux-систем$",
     r"^Сервер 1С:Предприятия \(64-bit\) для RPM-based Linux-систем$"
@@ -112,7 +112,7 @@ def get_urls_from_page(url: str) -> list:
         links = soup.find_all("a", href=True)
         urls = {}
         for link in links:
-            #print(link.text.strip(), "->", link['href'])
+            #print(link.text.strip(), ":   ", link['href'])
             href = link['href']
             if href.startswith("/version_file") and any(re.fullmatch(pattern, link.text) for pattern in necessary_components):
                 urls[link.text] = href
@@ -218,15 +218,15 @@ if __name__ == "__main__":
         smtl_version = "2.1.1.38"
     smtl_page = f"{BASE_URL}/version_files?nick=SMTL21&ver={smtl_version}"
 
-    '''postgre_version = input("Введите версию PostgreSQL (оставьте пустым, чтобы использовать версию по умолчанию): ").strip()
+    postgre_version = input("Введите версию PostgreSQL (оставьте пустым, чтобы использовать версию по умолчанию): ").strip()
     if postgre_version == "":
         postgre_version = "17.8-1.1C"
-    postgre_page = f"{BASE_URL}/version_files?nick=PostgreSQL&ver={postgre_version}"'''
+    postgre_page = f"{BASE_URL}/version_files?nick=AddCompPostgre&ver={postgre_version}"
 
     if not login_1c(username, password):
         print("Авторизация не удалась.")
         input("Нажмите Enter для выхода...")
-        sys.exit(1)
+        exit(1)
 
     platform_urls = get_urls_from_page(platform_page)
     for name, url in platform_urls.items():
@@ -276,10 +276,10 @@ if __name__ == "__main__":
             download_file(download_url)
         time.sleep(DELAY_BETWEEN_DOWNLOADS)
 
-    '''postgre_urls = get_urls_from_page(postgre_page)
+    postgre_urls = get_urls_from_page(postgre_page)
     for name, url in postgre_urls.items():
         download_url = get_direct_download_url(BASE_URL + url)
         if download_url:
             print(f"Скачиваем компонент: {name}")
             download_file(download_url)
-        time.sleep(DELAY_BETWEEN_DOWNLOADS)'''
+        time.sleep(DELAY_BETWEEN_DOWNLOADS)
