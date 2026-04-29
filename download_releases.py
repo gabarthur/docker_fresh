@@ -5,13 +5,28 @@ import re
 import getpass
 from urllib.parse import urlparse
 from bs4 import BeautifulSoup
-import json
+import platform
+
+'''OS_TYPE = ("Windows" if platform.system() == "Windows"
+           else "Linux" if platform.system() == "Linux"
+           else "other")
+if OS_TYPE == "Linux":
+    OS_NAME = platform.version()
+OS_ARCHITECTURE = platform.machine()
+
+OS_TYPE = "Windows"             #УДАЛИТЬ!!!
+OS_NAME = "Ubuntu"            #УДАЛИТЬ!!!
+OS_VERSION = "22.04"          #УДАЛИТЬ!!!
+#if OS_NAME == "other":
+#    print("Установка на данной ОС не поддерживается. Завершение...")
+#    exit(1)'''
 
 DOWNLOAD_DIR = "distr"
-LIST_FILE = "other_files/fresh_components.json"
 
 TIMEOUT = 60
-DELAY_BETWEEN_DOWNLOADS = 5
+DELAY_BETWEEN_DOWNLOADS = 1
+
+BASE_URL = "https://releases.1c.ru"
 
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
@@ -22,6 +37,28 @@ session.headers.update({
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
     "Accept-Language": "ru-RU,ru;q=0.9,en;q=0.8",
 })
+
+necessary_components = [
+    r"^Менеджер сервиса\. Версия .+?\. Полный дистрибутив$",
+    r"^Агент сервиса\. Версия .+?\. Полный дистрибутив$",
+    r"^Управление службой поддержки, версия .+?\. Полный дистрибутив$",
+    r"^Менеджер доступности, версия .+?\. Полный дистрибутив$",
+    r"^Сайт, версия .+?\. DEB, RPM для Linux и WAR-файл в одном архиве$",
+    r"^Форум, версия .+?\. DEB, RPM для Linux и WAR-файл в одном архиве$",
+    r"^Шлюз приложений, версия .+?\. DEB, RPM для Linux и JAR-файл в одном архиве$",
+    r"^Страница недоступности, версия .+?\. DEB, RPM для Linux и WAR в одном архиве$",
+    r"^Сервер исполнителя скриптов подсистемы 1С:Фреш, версия .*$",
+    r"^Приложение 1С:Шины, версия .*$",
+    r"^.*Дистрибутив 1С:Исполнитель \(U\).*$",
+    r"^.*Сервер взаимодействия \(64-bit\) Linux$",
+    r"^.*Сервер 1С:Шины со средой разработки для ОС Linux$",
+    r"^.*Дистрибутив СУБД PostgreSQL для Debian 13.0 x86 \(64-bit\) одним архивом.*$",
+    r"^.*Дистрибутив СУБД PostgreSQL для Debian 13.0 x86 (64-bit) (дополнительные модули) одним архивом.*$",
+    r"^Полный дистрибутив$",
+    r"^Клиент 1С:Предприятия \(64-bit\) для DEB-based Linux-систем$",
+    r"^Сервер 1С:Предприятия \(64-bit\) для DEB-based Linux-систем$",
+    r"^Утилита лицензирования 1С:Предприятия для Linux \(64-bit\)$"
+]
 
 def login_1c(username: str, password: str) -> bool:
     print("Открываем страницу логина...")
@@ -69,43 +106,22 @@ def login_1c(username: str, password: str) -> bool:
         print("Не удалось войти на releases.1c.ru")
         return False
 
-
-def get_urls_from_json() -> list:
-    if not os.path.exists(LIST_FILE):
-        print("Файл", LIST_FILE, "не найден!")
+def get_urls_from_page(url: str) -> list:
+    try:
+        r = session.get(url, timeout=TIMEOUT)
+        r.raise_for_status()
+        soup = BeautifulSoup(r.text, "html.parser")
+        links = soup.find_all("a", href=True)
+        urls = {}
+        for link in links:
+            #print(link.text.strip(), ":   ", link['href'])
+            href = link['href']
+            if href.startswith("/version_file") and any(re.fullmatch(pattern, link.text) for pattern in necessary_components):
+                urls[link.text] = href
+        return urls
+    except Exception as e:
+        print("Ошибка при получении URL-ов:", e)
         return []
-
-    with open(LIST_FILE, "r", encoding="utf-8") as f:
-        try:
-            data = json.load(f)
-            urls = []
-            for item in data.get("components", []):
-                url = item.get("url")
-                if url:
-                    urls.append(url)
-            return urls
-        except json.JSONDecodeError as e:
-            print("Ошибка при чтении JSON:", e)
-            return []
-
-def get_urls_from_readme() -> list:
-    if not os.path.exists(LIST_FILE):
-        print("Файл", LIST_FILE, "не найден!")
-        return []
-
-    with open(LIST_FILE, "r", encoding="utf-8") as f:
-        content = f.read()
-
-    start_marker = "Компоненты используемые для тестирования"
-    if start_marker not in content:
-        print("Раздел 'Компоненты используемые для тестирования' не найден в README.md")
-        return []
-
-    section = content.split(start_marker, 1)[1].split("\n\n", 1)[0]
-
-    urls = re.findall(r'https://releases\.1c\.ru/[^\s"\')]+', section)
-    return list(dict.fromkeys(urls))
-
 
 def get_direct_download_url(page_url: str) -> str:
     try:
@@ -119,63 +135,13 @@ def get_direct_download_url(page_url: str) -> str:
             if href.startswith("http"):
                 return href
             else:
-                return "https://releases.1c.ru" + href if href.startswith("/") else href
+                return BASE_URL + href if href.startswith("/") else href
     except Exception as e:
         print("Ошибка при поиске 'Скачать дистрибутив':", e)
 
     return None
 
-
 def download_file(url: str):
-    print("Обрабатываем страницу:", url)
-
-    direct_url = get_direct_download_url(url)
-    if not direct_url:
-        print("Ссылка 'Скачать дистрибутив' не найдена")
-        return
-
-    print("Найдена ссылка 'Скачать дистрибутив':", direct_url)
-
-    # Получаем имя файла из заголовка
-    try:
-        head = session.head(direct_url, timeout=TIMEOUT, allow_redirects=True)
-        content_disposition = head.headers.get("Content-Disposition", "")
-        filename = None
-        if "filename=" in content_disposition:
-            match = re.search(r'filename\*?="?([^";]+)', content_disposition)
-            if match:
-                filename = match.group(1).strip().strip('"')
-    except:
-        filename = None
-
-    if not filename:
-        filename = os.path.basename(urlparse(direct_url).path)
-        if not filename or "." not in filename:
-            filename = "1c_file_" + str(int(time.time())) + ".zip"
-
-    filepath = os.path.join(DOWNLOAD_DIR, filename)
-
-    # Проверка на существование файла
-    if os.path.exists(filepath):
-        print("Файл уже существует, пропускаем")
-        return
-
-    print("Скачиваем файл...")
-    try:
-        with session.get(direct_url, stream=True, timeout=TIMEOUT) as response:
-            response.raise_for_status()
-
-            with open(filepath, "wb") as f:
-                for chunk in response.iter_content(chunk_size=32*1024):
-                    if chunk:
-                        f.write(chunk)
-
-        size_mb = os.path.getsize(filepath) // (1024 * 1024)
-        print("Скачано:", filename, "(", size_mb, "МБ)")
-    except Exception as e:
-        print("Ошибка скачивания:", e)
-
-def download_file_from_url(url: str):
     
     # Получаем имя файла из заголовка
     try:
@@ -212,10 +178,39 @@ def download_file_from_url(url: str):
                         f.write(chunk)
                         
         size_mb = os.path.getsize(filepath) // (1024 * 1024)
-        print("Скачано:", filename, "(", size_mb, "МБ)")
+        print("Скачано:", filename, "(" + str(size_mb) + " МБ)")
     except Exception as e:
         print("Ошибка скачивания:", e)
 
+def download_components_from_page(page_url: str, component_name: str = "компонент"):
+    print(f"\n=== Обработка {component_name} ===")
+    print(f"Страница: {page_url}")
+    
+    try:
+        urls = get_urls_from_page(page_url)
+        
+        if not urls:
+            print(f"Не найдено подходящих файлов на странице {page_url}")
+            return
+        
+        print(f"Найдено файлов для скачивания: {len(urls)}")
+        
+        for name, url in urls.items():
+            try:
+                download_url = get_direct_download_url(BASE_URL + url)
+                if download_url:
+                    print(f"Скачиваем компонент: {name}")
+                    download_file(download_url)
+                else:
+                    print(f"Не удалось получить прямую ссылку скачивания для: {name}")
+            except Exception as e:
+                print(f"Ошибка при обработке файла '{name}': {e}")
+            
+            time.sleep(DELAY_BETWEEN_DOWNLOADS)
+            
+    except Exception as e:
+        print(f"КРИТИЧЕСКАЯ ОШИБКА при обработке группы '{component_name}': {e}")
+        print("Продолжаем обработку следующих групп компонентов...\n")
 
 if __name__ == "__main__":
     import urllib3
@@ -224,29 +219,22 @@ if __name__ == "__main__":
     print("=== Авторизация на releases.1c.ru ===")
     username = input("Введите логин (обычно email): ").strip()
     password = getpass.getpass("Введите пароль: ")
+    print("=== Указание версий компонентов ===")
+    from components_config import COMPONENTS
 
-    if not username or not password:
-        print("Логин или пароль не введён. Выход.")
-        exit(1)
+    component_pages = []
+    for comp in COMPONENTS:
+        version = input(f"Введите версию {comp['name']} (оставьте пустым для значения по умолчанию '{comp['version']}'): ").strip()
+        if version == "":
+            version = comp['version']
+        
+        page_url = f"{BASE_URL}/version_files?nick={comp['nick']}&ver={version}"
+        component_pages.append((page_url, comp['name']))
 
     if not login_1c(username, password):
         print("Авторизация не удалась.")
         input("Нажмите Enter для выхода...")
         exit(1)
 
-    urls = get_urls_from_json()
-
-    if not urls:
-        print("Не удалось найти ссылки в", LIST_FILE)
-        input("Нажмите Enter...")
-        exit(1)
-
-    print("Найдено", len(urls), "ссылок для обработки.")
-
-    for i, url in enumerate(urls, 1):
-        print("[", i, "/", len(urls), "]")
-        download_file_from_url(url)
-        if i < len(urls):
-            time.sleep(DELAY_BETWEEN_DOWNLOADS)
-
-    print("Готово! Файлы сохранены в папку:", os.path.abspath(DOWNLOAD_DIR))
+    for page_url, component_name in component_pages:
+        download_components_from_page(page_url, component_name)
