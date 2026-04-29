@@ -238,33 +238,3 @@ if __name__ == "__main__":
 
     for page_url, component_name in component_pages:
         download_components_from_page(page_url, component_name)
-
-    '''for archive in os.listdir(DOWNLOAD_DIR):
-        if archive.endswith(".zip"):
-            print(f"Распаковка {archive}...")
-            for component in ["site", "forum"]:
-                if component in archive.lower():
-                    try:
-                        import zipfile
-                        with zipfile.ZipFile(os.path.join(DOWNLOAD_DIR, archive), 'r') as zip_file:
-                            for name in zip_file.namelist():
-                                if name.lower().endswith('.war'):
-                                    print(f"Найден WAR-файл: {name}. Извлекаем...")
-                                    filename = os.path.join(DOWNLOAD_DIR, component, "root.war")
-                                    os.makedirs(os.path.join(DOWNLOAD_DIR, component), exist_ok=True)
-                                    with zip_file.open(name) as src, open(filename, 'wb') as dst:
-                                        dst.write(src.read())
-                                    print(f'Сохранён как: {filename}')
-                                    break
-                    except Exception as e:
-                        print(f"Ошибка при распаковке {archive}: {e}")
-                    os.remove(os.path.join(DOWNLOAD_DIR, archive))
-        elif archive.endswith(".tar.gz"):
-            print(f"Распаковка {archive}...")
-            try:
-                import tarfile
-                with tarfile.open(os.path.join(DOWNLOAD_DIR, archive), 'r:gz') as tar_file:
-                    tar_file.extractall(DOWNLOAD_DIR)
-                print(f"{archive} успешно распакован.")
-            except Exception as e:
-                print(f"Ошибка при распаковке {archive}: {e}")'''
