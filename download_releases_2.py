@@ -239,7 +239,7 @@ if __name__ == "__main__":
     for page_url, component_name in component_pages:
         download_components_from_page(page_url, component_name)
 
-    for archive in os.listdir(DOWNLOAD_DIR):
+    '''for archive in os.listdir(DOWNLOAD_DIR):
         if archive.endswith(".zip"):
             print(f"Распаковка {archive}...")
             for component in ["site", "forum"]:
@@ -259,7 +259,7 @@ if __name__ == "__main__":
                     except Exception as e:
                         print(f"Ошибка при распаковке {archive}: {e}")
                     os.remove(os.path.join(DOWNLOAD_DIR, archive))
-        '''elif archive.endswith(".tar.gz"):
+        elif archive.endswith(".tar.gz"):
             print(f"Распаковка {archive}...")
             try:
                 import tarfile
