@@ -40,7 +40,7 @@ images = []
 images.append(debian.New())
 #images.append(db.New())
 images.append(site.New())
-#images.append(forum.New())
+images.append(forum.New())
 #images.append(core.New(is_new_path_to_platform))
 #images.append(gate.New())
 
