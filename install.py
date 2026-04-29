@@ -28,21 +28,21 @@ def image_exist(image_name):
     
     return full_image_name in str(result.stdout)
 
-if '-v' not in sys.argv:
-    print('parameter -v not specified')
-    exit(1)
-else:
-    platform_ver = sys.argv[sys.argv.index('-v') + 1]
-is_new_path_to_platform = int(platform_ver.split('.')[2]) >= 20
+#if '-v' not in sys.argv:
+#    print('parameter -v not specified')
+#    exit(1)
+#else:
+#    platform_ver = sys.argv[sys.argv.index('-v') + 1]
+#is_new_path_to_platform = int(platform_ver.split('.')[2]) >= 20
 
 images = []
 #images.append(centos.New())
 images.append(debian.New())
-images.append(db.New())
+#images.append(db.New())
 images.append(site.New())
-images.append(forum.New())
-images.append(core.New(is_new_path_to_platform))
-images.append(gate.New())
+#images.append(forum.New())
+#images.append(core.New(is_new_path_to_platform))
+#images.append(gate.New())
 
 debug = '-debug' in sys.argv
 
