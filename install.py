@@ -41,7 +41,7 @@ images.append(debian.New())
 #images.append(db.New())
 images.append(site.New())
 images.append(forum.New())
-#images.append(core.New(is_new_path_to_platform))
+images.append(core.New())
 #images.append(gate.New())
 
 debug = '-debug' in sys.argv
@@ -70,11 +70,11 @@ for image in images:
         '-t',
         'fresh/' + image.name]
 
-    if image.name == 'core' and is_new_path_to_platform:
-        command_to_run.append('-f')
-        command_to_run.append('images/' + image.name + '/Dockerfile_20')
-        command_to_run.append('--build-arg')
-        command_to_run.append('DISTR_VERSION=' + platform_ver)
+    #if image.name == 'core' and is_new_path_to_platform:
+    #    command_to_run.append('-f')
+    #    command_to_run.append('images/' + image.name + '/Dockerfile_20')
+    #    command_to_run.append('--build-arg')
+    #    command_to_run.append('DISTR_VERSION=' + platform_ver)
     
     command_to_run.append('images/' + image.name)
 

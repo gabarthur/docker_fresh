@@ -15,10 +15,11 @@ def unzip_platform_distr(is_new_path_to_platform):
     command.append(helper.this_path + helper.replace_sep('images/core') + ':/main_dir')
     command.append('alpine')
     command.append('sh')
-    if is_new_path_to_platform:
-        command.append('/main_dir/get_platform_from_20_ver.sh')
-    else:
-        command.append('/main_dir/get_platform_to_19_ver.sh')
+    command.append('/main_dir/get_platform.sh')
+    #if is_new_path_to_platform:
+    #    command.append('/main_dir/get_platform_from_20_ver.sh')
+    #else:
+    #    command.append('/main_dir/get_platform_to_19_ver.sh')
     return command
 
 
