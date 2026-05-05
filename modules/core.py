@@ -6,7 +6,7 @@ def download_onescript():
     command.append('wget')
     command.append('-O')
     command.append('/out_files/onescript.deb')
-    command.append('https://oscript.io/downloads/1_4_0/x64/onescript-engine_1.4.0_all.deb')
+    command.append('https://oscript.io/downloads/1_7_0/x64/onescript-engine_1.7.0_all.deb')
     return command
 
 def unzip_platform_distr():
@@ -25,7 +25,7 @@ def unzip_platform_distr():
 
 def add_all_before_commands():
     commands = []
-    commands.append(download_onescript())
+    #commands.append(download_onescript())
     commands.append(unzip_platform_distr())
     return commands
 
@@ -43,7 +43,7 @@ def delete_license_tools_files():
 
 def add_all_after_commands():
     commands = []
-    #commands.append(delete_core_distr_files())
+    commands.append(delete_core_distr_files())
     commands.append(delete_license_tools_files())
     return commands
 
