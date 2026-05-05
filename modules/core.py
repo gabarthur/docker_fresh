@@ -5,8 +5,8 @@ def download_onescript():
     command.append('alpine')
     command.append('wget')
     command.append('-O')
-    command.append('/out_files/onescript.rpm')
-    command.append('https://oscript.io/downloads/1_4_0/x64/onescript-engine-1.4.0-1.fc26.noarch.rpm')
+    command.append('/out_files/onescript.deb')
+    command.append('https://oscript.io/downloads/1_4_0/x64/onescript-engine_1.4.0_all.deb')
     return command
 
 def unzip_platform_distr():
