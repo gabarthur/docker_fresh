@@ -34,6 +34,11 @@ def image_exist(image_name):
 #else:
 #    platform_ver = sys.argv[sys.argv.index('-v') + 1]
 #is_new_path_to_platform = int(platform_ver.split('.')[2]) >= 20
+from components_config import COMPONENTS
+for comp in COMPONENTS:
+    if comp['nick'] == 'Platform85':
+        platform_ver = comp['version']
+        break
 
 images = []
 #images.append(centos.New())
@@ -69,7 +74,9 @@ for image in images:
         'build',
         '-t',
         'fresh/' + image.name]
-
+    if image.name == 'core':
+        command_to_run.append('--build-arg')
+        command_to_run.append('DISTR_VERSION=' + platform_ver)
     #if image.name == 'core' and is_new_path_to_platform:
     #    command_to_run.append('-f')
     #    command_to_run.append('images/' + image.name + '/Dockerfile_20')
