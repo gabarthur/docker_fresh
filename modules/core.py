@@ -43,7 +43,7 @@ def delete_license_tools_files():
 
 def add_all_after_commands():
     commands = []
-    commands.append(delete_core_distr_files())
+    #commands.append(delete_core_distr_files())
     commands.append(delete_license_tools_files())
     return commands
 
