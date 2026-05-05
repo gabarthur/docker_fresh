@@ -52,8 +52,8 @@ RUN \
     chmod 0440 /etc/sudoers.d/usr1cv8 ;\
     chmod +x /entrypoint.sh
  
-ADD ./apache2.conf /etc/apache2/apache2.conf
-ADD ./logcfg.xml /opt/1cv8/conf/logcfg.xml
+#ADD ./apache2.conf /etc/apache2/apache2.conf
+#ADD ./logcfg.xml /opt/1cv8/conf/logcfg.xml
  
 ENV LANG=ru_RU.UTF-8
 ENV PATH=$PATH:/opt/1c
