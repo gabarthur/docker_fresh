@@ -5,8 +5,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 ARG DISTR_VERSION
  
 COPY entrypoint.sh /entrypoint.sh
-
-ADD ./distr/*.run /tmp/core/
+COPY ./distr/*.run /tmp/core/
 
 RUN \
     set -e ;\
@@ -17,10 +16,10 @@ RUN \
     #wget --no-verbose https://s3.1c709.ru/builds/executor_server/latest.zip ;\
     #mkdir /executor-server ;\
     #unzip -qq latest.zip -d /executor-server ;\
-    apt-get --allow-releaseinfo-change update ;\
-    apt -y upgrade ;\
+    #apt-get --allow-releaseinfo-change update ;\
+    #apt -y upgrade ;\
     apt-get -y update ;\
-    apt-get -y install apache2 xvfb x11vnc sudo nano python3 libodbc1 odbc-postgresql net-tools icewm xfce4 gdb libxt6 libglib2.0-0 libgtk-3-0 libsoup-gnome2.4-1 libenchant-2-2 libgstreamer-gl1.0-0 libharfbuzz-icu0 iproute2 libwebkit2gtk-4.0-37 chromium python3-selenium dbus wmctrl ;\
+    apt-get install -y --no-install-recommends apache2 xvfb x11vnc sudo nano python3 libodbc1 odbc-postgresql net-tools icewm xfce4 gdb libxt6 libglib2.0-0 libgtk-3-0 libsoup-gnome2.4-1 libenchant-2-2 libgstreamer-gl1.0-0 libharfbuzz-icu0 iproute2 libwebkit2gtk-4.0-37 chromium python3-selenium dbus wmctrl ;\
     #curl -o ./bellsoft-jre11-linux-amd64.deb https://s3.1c709.ru/liberica/bellsoft-jre11.0.28+12-linux-amd64-full.deb;\
     #apt-get -y install ./bellsoft-jre11-linux-amd64.deb;\
     #rm ./bellsoft-jre11-linux-amd64.deb;\
@@ -35,6 +34,7 @@ RUN \
     apt-get -y clean ;\
     localedef -i ru_RU -f UTF-8 ru_RU ;\
     rm -rf /tmp/core ;\
+    rm -rf /var/lib/apt/lists/* ;\
     ln -s /opt/1cv8/x86_64/$DISTR_VERSION /opt/1c ;\
     if [ ! -f /usr/lib/x86_64-linux-gnu/libenchant.so.1 ]; then ln -s /usr/lib/x86_64-linux-gnu/libenchant-2.so.2 /usr/lib/x86_64-linux-gnu/libenchant.so.1;fi ;\
     touch /etc/sudoers.d/www-data ;\
