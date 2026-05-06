@@ -5,13 +5,15 @@ ENV DEBIAN_FRONTEND=noninteractive
 ARG DISTR_VERSION
  
 COPY entrypoint.sh /entrypoint.sh
- 
+
+ADD ./distr/*.run /tmp/core/
+
 RUN \
     set -e ;\
     mkdir /tmp/core ;\
     cd /tmp/core ;\
-    wget --no-verbose http://ftp.debian.org/debian/pool/contrib/m/msttcorefonts/ttf-mscorefonts-installer_3.8_all.deb ;\
-    wget --no-verbose https://oscript.io/downloads/1_7_0/x64/onescript-engine_1.7.0_all.deb ;\
+    #wget --no-verbose http://ftp.debian.org/debian/pool/contrib/m/msttcorefonts/ttf-mscorefonts-installer_3.8_all.deb ;\
+    #wget --no-verbose https://oscript.io/downloads/1_7_0/x64/onescript-engine_1.7.0_all.deb ;\
     #wget --no-verbose https://s3.1c709.ru/builds/executor_server/latest.zip ;\
     #mkdir /executor-server ;\
     #unzip -qq latest.zip -d /executor-server ;\
@@ -25,7 +27,8 @@ RUN \
     apt-get -y remove xscreensaver ;\
     apt-get -y install ssh imagemagick gstreamer1.0-plugins-bad ./*.deb ;\
     #chmod +x /tmp/core/setup-full-$DISTR_VERSION-x86_64.run ;\
-    /out_files/setup-full-$DISTR_VERSION-x86_64.run --mode unattended --enable-components client_full,server,ws,ru,uk,pl,vi,it,ro ;\
+    /tmp/core/setup-full-$DISTR_VERSION-x86_64.run --mode unattended --enable-components client_full,server,ws,ru,uk,pl,vi,it,ro ;\
+    rm -rf /tmp/core/setup-full-$DISTR_VERSION-x86_64.run ;\
     update-ca-certificates ;\
     opm install deployka ;\
     a2enmod headers ;\
