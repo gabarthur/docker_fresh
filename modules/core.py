@@ -32,7 +32,7 @@ def add_all_before_commands():
 def delete_core_distr_files():
     command = helper.new_docker_command('images/core/distr/')
     command.append('alpine')
-    command.append('sh -c "rm -rf /out_files/*.rpm"')
+    command.append('sh -c "rm -rf /out_files/*.deb /out_files/*.run"')
     return command
 
 def delete_license_tools_files():
