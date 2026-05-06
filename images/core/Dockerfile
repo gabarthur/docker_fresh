@@ -13,7 +13,7 @@ RUN \
     #mkdir /tmp/core ;\
     cd /tmp/core ;\
     #wget --no-verbose http://ftp.debian.org/debian/pool/contrib/m/msttcorefonts/ttf-mscorefonts-installer_3.8_all.deb ;\
-    #wget --no-verbose https://oscript.io/downloads/1_7_0/x64/onescript-engine_1.7.0_all.deb ;\
+    wget --no-verbose https://oscript.io/downloads/1_7_0/x64/onescript-engine_1.7.0_all.deb ;\
     #wget --no-verbose https://s3.1c709.ru/builds/executor_server/latest.zip ;\
     #mkdir /executor-server ;\
     #unzip -qq latest.zip -d /executor-server ;\
