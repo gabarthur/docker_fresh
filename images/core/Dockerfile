@@ -24,8 +24,8 @@ RUN \
     #rm ./bellsoft-jre11-linux-amd64.deb;\
     apt-get -y remove xscreensaver ;\
     apt-get -y install ssh imagemagick gstreamer1.0-plugins-bad ./*.deb ;\
-    chmod +x /tmp/core/setup-full-$DISTR_VERSION-x86_64.run ;\
-    /tmp/core/setup-full-$DISTR_VERSION-x86_64.run --mode unattended --enable-components client_full,server,ws,ru,uk,pl,vi,it,ro ;\
+    #chmod +x /tmp/core/setup-full-$DISTR_VERSION-x86_64.run ;\
+    /main_dir/setup-full-$DISTR_VERSION-x86_64.run --mode unattended --enable-components client_full,server,ws,ru,uk,pl,vi,it,ro ;\
     update-ca-certificates ;\
     opm install deployka ;\
     a2enmod headers ;\
