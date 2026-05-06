@@ -10,7 +10,7 @@ ADD ./distr/*.run /tmp/core/
 
 RUN \
     set -e ;\
-    mkdir /tmp/core ;\
+    #mkdir /tmp/core ;\
     cd /tmp/core ;\
     #wget --no-verbose http://ftp.debian.org/debian/pool/contrib/m/msttcorefonts/ttf-mscorefonts-installer_3.8_all.deb ;\
     #wget --no-verbose https://oscript.io/downloads/1_7_0/x64/onescript-engine_1.7.0_all.deb ;\
