@@ -5,9 +5,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 ARG DISTR_VERSION
 
 COPY entrypoint.sh /entrypoint.sh
-COPY ./distr/license_tools /tmp/license_tools/
 
-RUN --mount=type=bind,source=./distr/setup-full-$DISTR_VERSION-x86_64.run,target=/tmp/distr/setup-full-$DISTR_VERSION-x86_64.run \
+RUN --mount=type=bind,source=./distr,target=/tmp/distr \
     set -e ;\
     mkdir /tmp/core ;\
     cd /tmp/core ;\
@@ -16,8 +15,6 @@ RUN --mount=type=bind,source=./distr/setup-full-$DISTR_VERSION-x86_64.run,target
     #wget --no-verbose https://s3.1c709.ru/builds/executor_server/latest.zip ;\
     #mkdir /executor-server ;\
     #unzip -qq latest.zip -d /executor-server ;\
-    #apt-get --allow-releaseinfo-change update ;\
-    #apt -y upgrade ;\
     apt-get -y update ;\
     apt-get install -y --no-install-recommends apache2 xvfb x11vnc sudo nano python3 libodbc1 odbc-postgresql net-tools icewm xfce4 gdb libxt6 libglib2.0-0 libgtk-3-0 libsoup-gnome2.4-1 libenchant-2-2 libgstreamer-gl1.0-0 libharfbuzz-icu0 iproute2 libwebkit2gtk-4.0-37 chromium python3-selenium dbus wmctrl ;\
     curl -o ./bellsoft-jre11-linux-amd64.deb https://s3.1c709.ru/liberica/bellsoft-jre11.0.28+12-linux-amd64-full.deb;\
@@ -26,7 +23,7 @@ RUN --mount=type=bind,source=./distr/setup-full-$DISTR_VERSION-x86_64.run,target
     apt-get -y remove xscreensaver ;\
     apt-get -y install ssh imagemagick gstreamer1.0-plugins-bad ./*.deb ;\
     /tmp/distr/setup-full-$DISTR_VERSION-x86_64.run --mode unattended --enable-components client_full,server,ws,ru,uk,pl,vi,it,ro ;\
-    /tmp/license_tools/1ce-installer-cli install --ignore-signature-warnings ;\
+    /tmp/distr/license_tools/1ce-installer-cli install --ignore-signature-warnings ;\
     update-ca-certificates ;\
     opm install deployka ;\
     a2enmod headers ;\
