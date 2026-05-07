@@ -1,16 +1,15 @@
 FROM fresh/debian
- 
+
 ENV DEBIAN_FRONTEND=noninteractive
- 
+
 ARG DISTR_VERSION
- 
+
 COPY entrypoint.sh /entrypoint.sh
-COPY ./distr/*.run /tmp/core/
 COPY ./distr/license_tools /tmp/license_tools/
 
-RUN \
+RUN --mount=type=bind,source=./distr/setup-full-$DISTR_VERSION-x86_64.run,target=/tmp/distr/setup-full-$DISTR_VERSION-x86_64.run \
     set -e ;\
-    #mkdir /tmp/core ;\
+    mkdir /tmp/core ;\
     cd /tmp/core ;\
     #wget --no-verbose http://ftp.debian.org/debian/pool/contrib/m/msttcorefonts/ttf-mscorefonts-installer_3.8_all.deb ;\
     wget --no-verbose https://oscript.io/downloads/1_7_0/x64/onescript-engine_1.7.0_all.deb ;\
@@ -26,8 +25,7 @@ RUN \
     rm ./bellsoft-jre11-linux-amd64.deb;\
     apt-get -y remove xscreensaver ;\
     apt-get -y install ssh imagemagick gstreamer1.0-plugins-bad ./*.deb ;\
-    #chmod +x /tmp/core/setup-full-$DISTR_VERSION-x86_64.run ;\
-    /tmp/core/setup-full-$DISTR_VERSION-x86_64.run --mode unattended --enable-components client_full,server,ws,ru,uk,pl,vi,it,ro ;\
+    /tmp/distr/setup-full-$DISTR_VERSION-x86_64.run --mode unattended --enable-components client_full,server,ws,ru,uk,pl,vi,it,ro ;\
     /tmp/license_tools/1ce-installer-cli install --ignore-signature-warnings ;\
     update-ca-certificates ;\
     opm install deployka ;\
@@ -55,10 +53,10 @@ RUN \
     cp /usr/bin/chromium /usr/bin/chromium-real ;\
     chmod 0440 /etc/sudoers.d/usr1cv8 ;\
     chmod +x /entrypoint.sh
- 
+
 #ADD ./apache2.conf /etc/apache2/apache2.conf
 #ADD ./logcfg.xml /opt/1cv8/conf/logcfg.xml
- 
+
 ENV LANG=ru_RU.UTF-8
 ENV PATH=$PATH:/opt/1c
 ENV COREDATA=/var/lib/1c/data
@@ -72,4 +70,3 @@ ENV EXECUTOR_DATA=/executor-server
 ENV FRESH=/var/www/fresh
 
 ENTRYPOINT [ "/entrypoint.sh" ]
- 
