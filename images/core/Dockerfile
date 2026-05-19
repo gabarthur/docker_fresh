@@ -4,51 +4,60 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 ARG DISTR_VERSION
 
-COPY entrypoint.sh /entrypoint.sh
+COPY ./images/core/entrypoint.sh /entrypoint.sh
 
-RUN --mount=type=bind,source=./distr,target=/tmp/distr \
-    set -e ;\
-    mkdir /tmp/core ;\
-    cd /tmp/core ;\
-    #wget --no-verbose http://ftp.debian.org/debian/pool/contrib/m/msttcorefonts/ttf-mscorefonts-installer_3.8_all.deb ;\
-    wget --no-verbose https://oscript.io/downloads/1_7_0/x64/onescript-engine_1.7.0_all.deb ;\
-    #wget --no-verbose https://s3.1c709.ru/builds/executor_server/latest.zip ;\
-    #mkdir /executor-server ;\
-    #unzip -qq latest.zip -d /executor-server ;\
-    apt-get -y update ;\
-    apt-get install -y --no-install-recommends apache2 xvfb x11vnc sudo nano python3 libodbc1 odbc-postgresql net-tools icewm xfce4 gdb libxt6 libglib2.0-0 libgtk-3-0 libsoup-gnome2.4-1 libenchant-2-2 libgstreamer-gl1.0-0 libharfbuzz-icu0 iproute2 libwebkit2gtk-4.0-37 chromium python3-selenium dbus wmctrl ;\
-    #curl -o ./bellsoft-jre11-linux-amd64.deb https://s3.1c709.ru/liberica/bellsoft-jre11.0.28+12-linux-amd64-full.deb;\
-    #apt-get -y install ./bellsoft-jre11-linux-amd64.deb;\
-    #rm ./bellsoft-jre11-linux-amd64.deb;\
-    apt-get -y remove xscreensaver ;\
-    apt-get -y install ssh imagemagick gstreamer1.0-plugins-bad ./*.deb ;\
-    /tmp/distr/setup-full-$DISTR_VERSION-x86_64.run --mode unattended --enable-components client_full,server,ws,ru,uk,pl,vi,it,ro ;\
-    /tmp/distr/license_tools/1ce-installer-cli install --ignore-signature-warnings ;\
-    update-ca-certificates ;\
-    opm install deployka ;\
-    a2enmod headers ;\
-    apt-get -y autoremove ;\
-    apt-get -y clean ;\
-    localedef -i ru_RU -f UTF-8 ru_RU ;\
-    rm -rf /tmp/core ;\
-    rm -rf /var/lib/apt/lists/* ;\
-    ln -s /opt/1cv8/x86_64/$DISTR_VERSION /opt/1c ;\
-    if [ ! -f /usr/lib/x86_64-linux-gnu/libenchant.so.1 ]; then ln -s /usr/lib/x86_64-linux-gnu/libenchant-2.so.2 /usr/lib/x86_64-linux-gnu/libenchant.so.1;fi ;\
-    touch /etc/sudoers.d/www-data ;\
-    echo "www-data ALL =NOPASSWD: /usr/sbin/apachectl graceful" >> /etc/sudoers.d/www-data ;\
-    echo "www-data ALL =NOPASSWD: /usr/sbin/apachectl graceful-stop" >> /etc/sudoers.d/www-data ;\
-    echo "www-data ALL =NOPASSWD: /usr/sbin/apachectl start" >> /etc/sudoers.d/www-data ;\
-    echo "www-data ALL =NOPASSWD: /opt/1c/webinst" >> /etc/sudoers.d/www-data ;\
-    echo "Defaults:www-data !requiretty" >> /etc/sudoers.d/www-data ;\
-    chmod 0440 /etc/sudoers.d/www-data ;\
-    touch /etc/sudoers.d/usr1cv8 ;\
-    echo "usr1cv8 ALL =NOPASSWD: /usr/sbin/apachectl graceful" >> /etc/sudoers.d/usr1cv8 ;\
-    echo "usr1cv8 ALL =NOPASSWD: /usr/sbin/apachectl graceful-stop" >> /etc/sudoers.d/usr1cv8 ;\
-    echo "usr1cv8 ALL =NOPASSWD: /usr/sbin/apachectl start" >> /etc/sudoers.d/usr1cv8 ;\
-    echo "usr1cv8 ALL =NOPASSWD: /opt/1c/webinst" >> /etc/sudoers.d/usr1cv8 ;\
-    echo "Defaults:usr1cv8 !requiretty" >> /etc/sudoers.d/usr1cv8 ;\
-    cp /usr/bin/chromium /usr/bin/chromium-real ;\
-    chmod 0440 /etc/sudoers.d/usr1cv8 ;\
+RUN --mount=type=bind,source=./distr,target=/tmp/distr_full \
+    set -e && \
+    mkdir /tmp/core && \
+    cd /tmp/core && \
+# Dependencies
+    #wget --no-verbose http://ftp.debian.org/debian/pool/contrib/m/msttcorefonts/ttf-mscorefonts-installer_3.8_all.deb && \
+    #wget --no-verbose https://s3.1c709.ru/builds/executor_server/latest.zip && \
+    #mkdir /executor-server && \
+    #unzip -qq latest.zip -d /executor-server && \
+    apt-get -y update && \
+    apt-get install -y --no-install-recommends apache2 xvfb x11vnc sudo nano python3 libodbc2 odbc-postgresql net-tools icewm xfce4 gdb libxt6 libglib2.0-0 libgtk-3-0 libsoup-gnome2.4-1 libenchant-2-2 libgstreamer-gl1.0-0 libharfbuzz-icu0 iproute2 libwebkit2gtk-4.1-0 chromium python3-selenium dbus wmctrl ssh imagemagick gstreamer1.0-plugins-bad&& \
+# OneScript
+    wget --no-verbose -O /tmp/core/onescript-engine.deb https://oscript.io/downloads/1_7_0/x64/onescript-engine_1.7.0_all.deb && \
+    apt-get -y install /tmp/core/onescript-engine.deb && \
+# Axiom JRE
+    apt-get -y install /tmp/distr_full/axiomjdk_jre_pro17.0.1715_linux_amd64_full.deb&& \
+# Platform
+    unzip /tmp/distr_full/server64_8_5_1_1302.zip -d /tmp/core/platform && \
+    /tmp/core/platform/setup-full-$DISTR_VERSION-x86_64.run --mode unattended --enable-components client_full,server,ws,ru,uk,pl,vi,it,ro && \
+# License Tools
+    mkdir /tmp/core/license_tools && \
+    tar -xf /tmp/distr_full/1c_enterprise_license_tools_0.15.0_2_linux_x86_64.tar.gz -C /tmp/core/license_tools && \
+    /tmp/core/license_tools/1ce-installer-cli install --ignore-signature-warnings && \
+# Misc
+    update-ca-certificates && \
+    opm install deployka && \
+    a2enmod headers && \
+    localedef -i ru_RU -f UTF-8 ru_RU && \
+# Cleanup
+    rm -rf /tmp/core && \
+    rm -rf /var/lib/apt/lists/* && \
+    apt-get -y remove xscreensaver && \
+    apt-get -y autoremove && \
+    apt-get -y clean && \
+# Symlinks
+    ln -s /opt/1cv8/x86_64/$DISTR_VERSION /opt/1c && \
+    if [ ! -f /usr/lib/x86_64-linux-gnu/libenchant.so.1 ]; then ln -s /usr/lib/x86_64-linux-gnu/libenchant-2.so.2 /usr/lib/x86_64-linux-gnu/libenchant.so.1;fi && \
+    touch /etc/sudoers.d/www-data && \
+    echo "www-data ALL =NOPASSWD: /usr/sbin/apachectl graceful" >> /etc/sudoers.d/www-data && \
+    echo "www-data ALL =NOPASSWD: /usr/sbin/apachectl graceful-stop" >> /etc/sudoers.d/www-data && \
+    echo "www-data ALL =NOPASSWD: /usr/sbin/apachectl start" >> /etc/sudoers.d/www-data && \
+    echo "www-data ALL =NOPASSWD: /opt/1c/webinst" >> /etc/sudoers.d/www-data && \
+    echo "Defaults:www-data !requiretty" >> /etc/sudoers.d/www-data && \
+    chmod 0440 /etc/sudoers.d/www-data && \
+    touch /etc/sudoers.d/usr1cv8 && \
+    echo "usr1cv8 ALL =NOPASSWD: /usr/sbin/apachectl graceful" >> /etc/sudoers.d/usr1cv8 && \
+    echo "usr1cv8 ALL =NOPASSWD: /usr/sbin/apachectl graceful-stop" >> /etc/sudoers.d/usr1cv8 && \
+    echo "usr1cv8 ALL =NOPASSWD: /usr/sbin/apachectl start" >> /etc/sudoers.d/usr1cv8 && \
+    echo "usr1cv8 ALL =NOPASSWD: /opt/1c/webinst" >> /etc/sudoers.d/usr1cv8 && \
+    echo "Defaults:usr1cv8 !requiretty" >> /etc/sudoers.d/usr1cv8 && \
+    cp /usr/bin/chromium /usr/bin/chromium-real && \
+    chmod 0440 /etc/sudoers.d/usr1cv8 && \
     chmod +x /entrypoint.sh
 
 #ADD ./apache2.conf /etc/apache2/apache2.conf

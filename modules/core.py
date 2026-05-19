@@ -1,34 +1,5 @@
 import modules.helper as helper
 
-def download_onescript():
-    command = helper.new_docker_command('images/core/distr/')
-    command.append('alpine')
-    command.append('wget')
-    command.append('-O')
-    command.append('/out_files/onescript.deb')
-    command.append('https://oscript.io/downloads/1_7_0/x64/onescript-engine_1.7.0_all.deb')
-    return command
-
-def unzip_platform_distr():
-    command = helper.new_docker_command()
-    command.append('-v')
-    command.append(helper.this_path + helper.replace_sep('images/core') + ':/main_dir')
-    command.append('alpine')
-    command.append('sh')
-    command.append('/main_dir/get_platform.sh')
-    #if is_new_path_to_platform:
-    #    command.append('/main_dir/get_platform_from_20_ver.sh')
-    #else:
-    #    command.append('/main_dir/get_platform_to_19_ver.sh')
-    return command
-
-
-def add_all_before_commands():
-    commands = []
-    #commands.append(download_onescript())
-    commands.append(unzip_platform_distr())
-    return commands
-
 def delete_core_distr_files():
     command = helper.new_docker_command('images/core/distr/')
     command.append('alpine')
@@ -55,5 +26,5 @@ class New():
 
     def __init__(self):
         self.name = 'core'
-        self.commands_before = add_all_before_commands()
-        self.commands_after = add_all_after_commands()
+        self.commands_before = []
+        self.commands_after = add_all_after_commands() #after-команды больше не должны быть нужны. Проверить, что и без них временные файлы не остаются.

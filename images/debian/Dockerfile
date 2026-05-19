@@ -1,4 +1,4 @@
-FROM debian:bookworm-slim
+FROM debian:latest
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -15,4 +15,4 @@ RUN \
 ENV LANG=ru_RU.utf8
 ENV DISPLAY=localhost:99.0
 
-ADD ./fonts/msttcorefonts.tar.gz /usr/share/fonts/truetype/msttcorefonts/
+ADD ./images/debian/fonts/msttcorefonts.tar.gz /usr/share/fonts/truetype/msttcorefonts/

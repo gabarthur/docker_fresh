@@ -38,5 +38,10 @@ COMPONENTS = [
         "nick": "EnterpriseLicenseTools",
         "version": "0.15.0.2",
         "name": "Инструменты для работы с лицензиями"
+    },
+    {
+        "nick": "Axiom17FullJRE",
+        "version": "17.0.17%2b15",
+        "name": "Axiom 17 Full JRE"
     }
 ]

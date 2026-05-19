@@ -4,7 +4,7 @@ import platform
 from datetime import datetime
 
 import modules.site as site
-import modules.centos as centos
+#import modules.centos as centos
 import modules.debian as debian
 import modules.db as db
 import modules.forum as forum
@@ -41,12 +41,11 @@ for comp in COMPONENTS:
         break
 
 images = []
-#images.append(centos.New())
 images.append(debian.New())
-#images.append(db.New())
 images.append(site.New())
 images.append(forum.New())
 images.append(core.New())
+images.append(db.New())
 #images.append(gate.New())
 
 debug = '-debug' in sys.argv
@@ -83,7 +82,12 @@ for image in images:
     #    command_to_run.append('--build-arg')
     #    command_to_run.append('DISTR_VERSION=' + platform_ver)
     
-    command_to_run.append('images/' + image.name)
+    #command_to_run.append('images/' + image.name)
+    command_to_run.append('-f')
+    command_to_run.append('images/' + image.name + '/Dockerfile')
+    command_to_run.append('.')
+    #print(f"command_to_run: {command_to_run}")
+
 
     result = subprocess.run(command_to_run, stdout=stdout, stderr=stderr)
 

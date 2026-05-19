@@ -6,7 +6,7 @@ RUN rm -rf /usr/local/tomcat/webapps/* && \
     mkdir -p /var/www/content/searchIndex \
     mkdir -p /var/www/content/site_files
 
-COPY ./distr/site/ROOT.war /usr/local/tomcat/webapps/
+COPY ./images/site/distr/site/ROOT.war /usr/local/tomcat/webapps/
 
 EXPOSE 8080
 

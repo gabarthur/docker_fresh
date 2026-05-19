@@ -57,7 +57,8 @@ necessary_components = [
     r"^Полный дистрибутив$",
     r"^Клиент 1С:Предприятия \(64-bit\) для DEB-based Linux-систем$",
     r"^Технологическая платформа 1С:Предприятия \(64-bit\) для Linux$",
-    r"^Утилита лицензирования 1С:Предприятия для Linux \(64-bit\)$"
+    r"^Утилита лицензирования 1С:Предприятия для Linux \(64-bit\)$",
+    r"^Axiom 17 Full JRE \(64-bit\) для DEB-based Linux-систем"
 ]
 
 def login_1c(username: str, password: str) -> bool:
