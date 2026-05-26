@@ -41,12 +41,12 @@ for comp in COMPONENTS:
         break
 
 images = []
-images.append(debian.New())
-images.append(site.New())
-images.append(forum.New())
-images.append(core.New())
-images.append(db.New())
-#images.append(gate.New())
+#images.append(debian.New())
+#images.append(site.New())
+#images.append(forum.New())
+#images.append(core.New())
+#images.append(db.New())
+images.append(gate.New())
 
 debug = '-debug' in sys.argv
 
