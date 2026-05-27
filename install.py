@@ -29,12 +29,6 @@ def image_exist(image_name):
 
     return full_image_name in str(result.stdout)
 
-#if '-v' not in sys.argv:
-#    print('parameter -v not specified')
-#    exit(1)
-#else:
-#    platform_ver = sys.argv[sys.argv.index('-v') + 1]
-#is_new_path_to_platform = int(platform_ver.split('.')[2]) >= 20
 from components_config import COMPONENTS
 for comp in COMPONENTS:
     if comp['nick'] == 'Platform85':
@@ -43,10 +37,10 @@ for comp in COMPONENTS:
 
 images = []
 images.append(debian.New())
-#images.append(site.New())
-#images.append(forum.New())
-#images.append(core.New())
-#images.append(db.New())
+images.append(site.New())
+images.append(forum.New())
+images.append(core.New())
+images.append(db.New())
 images.append(gate.New())
 images.append(esb.New())
 images.append(cs.New())
@@ -79,17 +73,9 @@ for image in images:
     if image.name == 'core':
         command_to_run.append('--build-arg')
         command_to_run.append('DISTR_VERSION=' + platform_ver)
-    #if image.name == 'core' and is_new_path_to_platform:
-    #    command_to_run.append('-f')
-    #    command_to_run.append('images/' + image.name + '/Dockerfile_20')
-    #    command_to_run.append('--build-arg')
-    #    command_to_run.append('DISTR_VERSION=' + platform_ver)
-
-    #command_to_run.append('images/' + image.name)
     command_to_run.append('-f')
     command_to_run.append('images/' + image.name + '/Dockerfile')
     command_to_run.append('.')
-    #print(f"command_to_run: {command_to_run}")
 
 
     result = subprocess.run(command_to_run, stdout=stdout, stderr=stderr)
