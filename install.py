@@ -10,6 +10,7 @@ import modules.forum as forum
 import modules.core as core
 import modules.gate as gate
 import modules.esb as esb
+import modules.cs as cs
 
 class colors:
     GREEN = '\033[92m'
@@ -48,6 +49,7 @@ images.append(debian.New())
 #images.append(db.New())
 images.append(gate.New())
 images.append(esb.New())
+images.append(cs.New())
 
 debug = '-debug' in sys.argv
 
