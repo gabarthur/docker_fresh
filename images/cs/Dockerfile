@@ -1,10 +1,12 @@
 FROM eclipse-temurin:26-jre-noble
 
+ARG DISTR_VERSION
+
 RUN --mount=type=bind,source=./distr,target=/tmp/distr_full \
     apt-get update && \
     apt-get -y install --no-install-recommends ca-certificates locales curl gosu gawk postgresql postgresql-contrib && \
     mkdir /tmp/cs && \
-    tar -xvf /tmp/distr_full/1c_cs_27.0.42_linux_x86_64.tar.gz -C /tmp/cs && \
+    tar -xvf /tmp/distr_full/1c_cs_*.tar.gz -C /tmp/cs && \
     /tmp/cs/1ce-installer-cli install --ignore-signature-warnings 1c-cs --components 1c-cs-server-small,1c-cs-hazelcast,1c-cs-elasticsearch,1c-enterprise-ring && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/* && \

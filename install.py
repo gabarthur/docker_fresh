@@ -33,7 +33,11 @@ from components_config import COMPONENTS
 for comp in COMPONENTS:
     if comp['nick'] == 'Platform85':
         platform_ver = comp['version']
-        break
+'''    if comp['nick'] == 'CollaborationSystem':
+        cs_ver = comp['version']
+    if comp['nick'] == 'esb':
+        esb_ver = comp['version']
+        break'''
 
 images = []
 images.append(debian.New())
@@ -73,6 +77,12 @@ for image in images:
     if image.name == 'core':
         command_to_run.append('--build-arg')
         command_to_run.append('DISTR_VERSION=' + platform_ver)
+#    if image.name == 'cs':
+#        command_to_run.append('--build-arg')
+#        command_to_run.append('DISTR_VERSION=' + cs_ver)
+#    if image.name == 'esb':
+#        command_to_run.append('--build-arg')
+#        command_to_run.append('DISTR_VERSION=' + esb_ver)
     command_to_run.append('-f')
     command_to_run.append('images/' + image.name + '/Dockerfile')
     command_to_run.append('.')
