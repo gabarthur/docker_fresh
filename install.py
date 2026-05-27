@@ -4,12 +4,12 @@ import platform
 from datetime import datetime
 
 import modules.site as site
-#import modules.centos as centos
 import modules.debian as debian
 import modules.db as db
 import modules.forum as forum
 import modules.core as core
 import modules.gate as gate
+import modules.esb as esb
 
 class colors:
     GREEN = '\033[92m'
@@ -25,7 +25,7 @@ def get_docker_image_command():
 def image_exist(image_name):
     full_image_name = 'fresh/' + image_name
     result = subprocess.run(get_docker_image_command(), shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    
+
     return full_image_name in str(result.stdout)
 
 #if '-v' not in sys.argv:
@@ -41,12 +41,13 @@ for comp in COMPONENTS:
         break
 
 images = []
-#images.append(debian.New())
+images.append(debian.New())
 #images.append(site.New())
 #images.append(forum.New())
 #images.append(core.New())
 #images.append(db.New())
 images.append(gate.New())
+images.append(esb.New())
 
 debug = '-debug' in sys.argv
 
@@ -81,7 +82,7 @@ for image in images:
     #    command_to_run.append('images/' + image.name + '/Dockerfile_20')
     #    command_to_run.append('--build-arg')
     #    command_to_run.append('DISTR_VERSION=' + platform_ver)
-    
+
     #command_to_run.append('images/' + image.name)
     command_to_run.append('-f')
     command_to_run.append('images/' + image.name + '/Dockerfile')
@@ -93,7 +94,7 @@ for image in images:
 
     if result.returncode != 0 or not image_exist(image.name):
         print('Building', image.name , '...', '{}error'.format(colors.RED), colors.WHITE)
-        exit(1)    
+        exit(1)
 
     for command in image.commands_after:
         if debug: print(command)
