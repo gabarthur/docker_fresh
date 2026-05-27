@@ -13,12 +13,12 @@ services:
       - ../images/site/create_db.psql:/create_db_site.psql
       - ../images/forum/create_db.psql:/create_db_forum.psql
       - ../images/db/wait_postgres.sh:/wait_postgres.sh
-  
+
   nginx:
     image: nginx:stable-alpine
     hostname: nginx.HOSTNAMEREPLACE
     container_name: nginx.HOSTNAMEREPLACE
-    networks: 
+    networks:
       default:
         aliases:
           - HOSTNAMEREPLACE
@@ -48,7 +48,7 @@ services:
       - ../images/site/distr/site/media:/var/www/content/media/
     depends_on:
       - site
-      - forum 
+      - forum
   s3:
     image: minio/minio:latest
     hostname: s3.1cfresh-dev.ru
@@ -64,7 +64,7 @@ services:
       interval: 30s
       timeout: 20s
       retries: 3
-      
+
   srv:
     image: fresh/core
     hostname: srv.HOSTNAMEREPLACE
@@ -78,7 +78,7 @@ services:
       - /tmp/.aksusb:/tmp/.aksusb
       - ../licenses_1c:/var/1C/licenses
       - ../conf/core:PATH_TO_1C_REPLACEconf
-      
+
     ports:
       - 1540-1541:1540-1541
       - 1538:1538
@@ -99,7 +99,7 @@ services:
       - ../images/core/conf/logcfg.xml:PATH_TO_1C_REPLACEconf/logcfg.xml
     ports:
       - 1545:1545
-      
+
   web:
     image: fresh/core
     hostname: web.HOSTNAMEREPLACE
@@ -113,7 +113,16 @@ services:
       - ./mnt:/mnt
     depends_on:
       - srv
-  
+
+  cs:
+    image: fresh/cs
+    hostname: cs.HOSTNAMEREPLACE
+    container_name: cs.HOSTNAMEREPLACE
+    volumes:
+      - ./artifacts/cs:/var/cs
+    environment:
+      - JAVA_TOOL_OPTIONS=-Xmx1024m
+
   site:
     image: fresh/site
     hostname: site.HOSTNAMEREPLACE
@@ -147,12 +156,25 @@ services:
     image: fresh/gate
     hostname: gate.HOSTNAMEREPLACE
     container_name: gate.HOSTNAMEREPLACE
-    volumes: 
+    volumes:
       - ./mnt:/mnt
     depends_on:
       - srv
 
-volumes: 
+  esb:
+    image: fresh/esb
+    hostname: esb.HOSTNAMEREPLACE
+    container_name: esb.HOSTNAMEREPLACE
+    ports:
+      - 9090:9090
+    volumes:
+      - ./artifacts/esb/data:/var/opt/1C/1CE/instances/1c-enterprise-esb
+      - ./artifacts/mnt:/mnt
+    environment:
+      - JAVA_TOOL_OPTIONS=-Xmx1024m
+
+
+volumes:
   1c_pg_data:
   1c_pg_socket:
   1c_server_data:

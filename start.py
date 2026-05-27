@@ -60,7 +60,7 @@ class ProgressThread(threading.Thread):
                 time.sleep(0.5)
 
 class DoThread(threading.Thread):
-    
+
     is_good = False
     def run(self):
         try:
@@ -82,16 +82,16 @@ def print_description(function_to_decorate):
             desc = ''
 
         all_desc = function_to_decorate.__doc__ + desc
-        
+
         task = DoThread(target=function_to_decorate, args=args, kwargs=kwargs)
         task.start()
 
         progress_thread = ProgressThread(all_desc)
         progress_thread.start()
-        
+
         task.join()
         progress_thread.stop()
-    
+
         while progress_thread.is_alive():
             time.sleep(0.2)
 
@@ -191,7 +191,7 @@ def prepare_new_ib(ib_name, int_name, conf_file_name, job_block):
             measure_duration=True)
         check_call_work(result, action, ib_name)
     else:
-        post_data = ''    
+        post_data = ''
 
     action = 'disable_safe_mode'
     result = call(' '.join(helper.disable_safe_mode(host_name, ib_name, action)),
@@ -221,7 +221,7 @@ def prepare_bases():
     sm_ib = None
 
     for ib_data in info_base_list:
-        if ib_data[ib_prop.name] == 'sm': 
+        if ib_data[ib_prop.name] == 'sm':
             sm_ib = ib_data
             continue
         prepare_new_ib(
@@ -232,8 +232,8 @@ def prepare_bases():
         )
         if ib_data[ib_prop.job]:
             enable_job(ib_data[ib_prop.name], ib_data[ib_prop.adm])
-    
-    # prepare sm base 
+
+    # prepare sm base
     prepare_new_ib(
             ib_name=sm_ib[ib_prop.name],
             int_name=sm_ib[ib_prop.int_name],
@@ -241,7 +241,7 @@ def prepare_bases():
             job_block=sm_ib[ib_prop.job]
         )
     if ib_prop.job:
-            enable_job(ib_data[ib_prop.name], ib_data[ib_prop.adm])    
+            enable_job(ib_data[ib_prop.name], ib_data[ib_prop.adm])
 
 @print_description
 def renew_nginx_files():
@@ -262,8 +262,8 @@ def renew_nginx_files():
 
 @print_description
 def renew_workdir():
-    """Renew wordir"""
-    
+    """Renew workdir"""
+
     call('rm -rf /out_files/workdir')
     call('mkdir -p {}mnt'.format(work_dir))
     call('mkdir -p {}artifacts/web/conf'.format(work_dir))
@@ -292,7 +292,7 @@ def renew_other_files():
 
 @print_description
 def create_bucket():
-    """Create new bucket to 1C"""
+    """Create new bucket for 1C"""
 
     call('mkdir /out_files/workdir/artifacts/s3/files')
 
@@ -315,10 +315,10 @@ def publish_sevises():
             internal=True,
             descriptor=ib_data[ib_prop.int_desc],
             base_name=ib_data[ib_prop.name])), remote=False)
-    
+
     # publish special services
     call(' '.join(helper.web_publish_command(
-        host_name, 'openid', False, 'openid', 'sm')), remote=False)    
+        host_name, 'openid', False, 'openid', 'sm')), remote=False)
     call(' '.join(helper.web_publish_command(host_name, 'sc', True,
         'sessioncontrol', 'sm;Usr=SessionControl;Pwd=' + sup_password)), remote=False)
     call(' '.join(helper.web_publish_command(host_name, 'extreg', True,
@@ -425,7 +425,7 @@ def enable_job(base_name, user):
 
 @print_description
 def down_containers():
-    """Down all conteiners"""
+    """Down all containers"""
 
     call(docker_compose_str + 'down', remote=False)
 
@@ -459,7 +459,7 @@ if new_server:
     renew_other_files()
     delete_volumes()
 
-# start db srv ras web gate conteiners
+# start db srv ras web gate containers
 call(docker_compose_str + 'up -d db srv ras web gate s3', remote=False, silent=False)
 wait_postgres()
 
@@ -470,7 +470,7 @@ if new_server:
     create_db_site()
     create_db_forum()
 
-# start site forum nginx conteiners
+# start site forum nginx containers
 call(docker_compose_str + 'up -d nginx site', remote=False, silent=False)
 wait_site()
 
