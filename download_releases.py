@@ -5,21 +5,9 @@ import re
 import getpass
 from urllib.parse import urlparse
 from bs4 import BeautifulSoup
-import platform
-
-'''OS_TYPE = ("Windows" if platform.system() == "Windows"
-           else "Linux" if platform.system() == "Linux"
-           else "other")
-if OS_TYPE == "Linux":
-    OS_NAME = platform.version()
-OS_ARCHITECTURE = platform.machine()
-
-OS_TYPE = "Windows"             #УДАЛИТЬ!!!
-OS_NAME = "Ubuntu"            #УДАЛИТЬ!!!
-OS_VERSION = "22.04"          #УДАЛИТЬ!!!
-#if OS_NAME == "other":
-#    print("Установка на данной ОС не поддерживается. Завершение...")
-#    exit(1)'''
+from struct import unpack
+import zlib
+import tempfile
 
 DOWNLOAD_DIR = "distr"
 
@@ -213,6 +201,76 @@ def download_components_from_page(page_url: str, component_name: str = "комп
         print(f"КРИТИЧЕСКАЯ ОШИБКА при обработке группы '{component_name}': {e}")
         print("Продолжаем обработку следующих групп компонентов...\n")
 
+def read_string(file):
+    str_len = unpack("I", file.read(4))[0]
+    size = str_len * 2
+    data = file.read(size)
+    return data.decode("utf-16-le")
+
+def read_supply_info(file):
+    file.read(4)
+    lang = read_string(file)
+    supply_name = read_string(file)
+    provider_name = read_string(file)
+    description_path = read_string(file)
+    return lang, supply_name, provider_name, description_path
+
+def read_included_file_info(file):
+    file.read(4)
+    filename = read_string(file)
+    filetime = unpack("Q", file.read(8))[0]
+    file.read(4)
+    file_size = unpack("I", file.read(4))[0]
+    return filename, filetime, file_size
+
+def extract_efd(efd_path: str, cf_filename, output_dir: str = "extracted", ):
+    os.makedirs(output_dir, exist_ok=True)
+    
+    with open(efd_path, "rb") as f:
+        with tempfile.TemporaryFile() as temp:
+            # Распаковка zlib (raw deflate, windowBits=-15)
+            decompressor = zlib.decompressobj(-15)
+            CHUNK_SIZE = 10 * 1024 * 1024
+            while True:
+                chunk = f.read(CHUNK_SIZE)
+                if not chunk:
+                    break
+                temp.write(decompressor.decompress(chunk))
+            temp.seek(0)
+            
+            # Получение заголовка
+            header, supply_info_count = unpack("II", temp.read(8))
+            print(f"Header: {header}, Supply infos: {supply_info_count}")
+            
+            for _ in range(supply_info_count):
+                info = read_supply_info(temp)
+                #print("Supply info:", info)
+            
+            # Получение списка файлов
+            included_files_count = unpack("I", temp.read(4))[0]
+            #print(f"Файлов внутри: {included_files_count}")
+            
+            included_files = []
+            for _ in range(included_files_count):
+                inc = read_included_file_info(temp)
+                included_files.append(inc)
+                #print(f"  → {inc[0]} ({inc[2]} байт)")
+            
+            # Извлечение файлов
+            for src_path, filetime, size in included_files:
+                clean_path = src_path.replace("\\\\", "/").replace("\\", "/")
+                filename = os.path.basename(clean_path)
+                out_path = os.path.join(output_dir, cf_filename)
+                
+                if filename.lower().endswith(".cf"):
+                    print(f"Извлекаем {filename} ({size} байт) → {out_path}")
+                    with open(out_path, "wb") as out_file:
+                        data = temp.read(size)
+                        out_file.write(data)
+                    #print(f"1CV8.CF успешно извлечён: {out_path}")
+    
+    print(f"\nГотово! Файлы конфигураций извлечены в {os.path.abspath(output_dir)}")
+
 if __name__ == "__main__":
     import urllib3
     urllib3.disable_warnings(urllib3.exceptions.NotOpenSSLWarning)
@@ -239,3 +297,28 @@ if __name__ == "__main__":
 
     for page_url, component_name in component_pages:
         download_components_from_page(page_url, component_name)
+
+    print("\n=== Поиск и обработка EFD-файлов в distr ===")
+    for filename in os.listdir(DOWNLOAD_DIR):
+        if filename.lower().endswith('.zip'):
+            cf_filename = filename.removesuffix(".zip") + ".cf"
+            zip_path = os.path.join(DOWNLOAD_DIR, filename)
+            print(f"Проверяем ZIP: {filename}")
+            try:
+                import zipfile
+                with zipfile.ZipFile(zip_path) as z:
+                    for name in z.namelist():
+                        if name.lower().endswith('.efd'):
+                            print(f"  Найден EFD: {name}")
+                            efd_data = z.read(name)
+                            efd_temp = os.path.join(DOWNLOAD_DIR, name)
+                            with open(efd_temp, "wb") as f:
+                                f.write(efd_data)
+                            
+                            extract_efd(efd_temp, cf_filename, DOWNLOAD_DIR)
+                            
+                            if os.path.exists(efd_temp):
+                                os.remove(efd_temp)
+                            break
+            except Exception as e:
+                print(f"  Ошибка обработки {filename}: {e}")
