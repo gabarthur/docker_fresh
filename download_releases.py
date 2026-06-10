@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 from struct import unpack
 import zlib
 import tempfile
+import shutil
 
 DOWNLOAD_DIR = "distr"
 
@@ -131,7 +132,7 @@ def get_direct_download_url(page_url: str) -> str:
     return None
 
 def download_file(url: str):
-    
+
     # Получаем имя файла из заголовка
     try:
         head = session.head(url, timeout=TIMEOUT, allow_redirects=True)
@@ -165,7 +166,7 @@ def download_file(url: str):
                 for chunk in response.iter_content(chunk_size=32*1024):
                     if chunk:
                         f.write(chunk)
-                        
+
         size_mb = os.path.getsize(filepath) // (1024 * 1024)
         print("Скачано:", filename, "(" + str(size_mb) + " МБ)")
     except Exception as e:
@@ -174,16 +175,16 @@ def download_file(url: str):
 def download_components_from_page(page_url: str, component_name: str = "компонент"):
     print(f"\n=== Обработка {component_name} ===")
     print(f"Страница: {page_url}")
-    
+
     try:
         urls = get_urls_from_page(page_url)
-        
+
         if not urls:
             print(f"Не найдено подходящих файлов на странице {page_url}")
             return
-        
+
         print(f"Найдено файлов для скачивания: {len(urls)}")
-        
+
         for name, url in urls.items():
             try:
                 download_url = get_direct_download_url(BASE_URL + url)
@@ -194,9 +195,9 @@ def download_components_from_page(page_url: str, component_name: str = "комп
                     print(f"Не удалось получить прямую ссылку скачивания для: {name}")
             except Exception as e:
                 print(f"Ошибка при обработке файла '{name}': {e}")
-            
+
             time.sleep(DELAY_BETWEEN_DOWNLOADS)
-            
+
     except Exception as e:
         print(f"КРИТИЧЕСКАЯ ОШИБКА при обработке группы '{component_name}': {e}")
         print("Продолжаем обработку следующих групп компонентов...\n")
@@ -223,9 +224,9 @@ def read_included_file_info(file):
     file_size = unpack("I", file.read(4))[0]
     return filename, filetime, file_size
 
-def extract_efd(efd_path: str, cf_filename, output_dir: str = "extracted", ):
+def extract_efd(efd_path: str, output_dir):
     os.makedirs(output_dir, exist_ok=True)
-    
+
     with open(efd_path, "rb") as f:
         with tempfile.TemporaryFile() as temp:
             # Распаковка zlib (raw deflate, windowBits=-15)
@@ -237,39 +238,30 @@ def extract_efd(efd_path: str, cf_filename, output_dir: str = "extracted", ):
                     break
                 temp.write(decompressor.decompress(chunk))
             temp.seek(0)
-            
+
             # Получение заголовка
             header, supply_info_count = unpack("II", temp.read(8))
-            print(f"Header: {header}, Supply infos: {supply_info_count}")
-            
+
             for _ in range(supply_info_count):
                 info = read_supply_info(temp)
-                #print("Supply info:", info)
-            
+
             # Получение списка файлов
             included_files_count = unpack("I", temp.read(4))[0]
-            #print(f"Файлов внутри: {included_files_count}")
-            
+
             included_files = []
             for _ in range(included_files_count):
                 inc = read_included_file_info(temp)
                 included_files.append(inc)
-                #print(f"  → {inc[0]} ({inc[2]} байт)")
-            
+
             # Извлечение файлов
             for src_path, filetime, size in included_files:
                 clean_path = src_path.replace("\\\\", "/").replace("\\", "/")
                 filename = os.path.basename(clean_path)
-                out_path = os.path.join(output_dir, cf_filename)
-                
-                if filename.lower().endswith(".cf"):
-                    print(f"Извлекаем {filename} ({size} байт) → {out_path}")
-                    with open(out_path, "wb") as out_file:
-                        data = temp.read(size)
-                        out_file.write(data)
-                    #print(f"1CV8.CF успешно извлечён: {out_path}")
-    
-    print(f"\nГотово! Файлы конфигураций извлечены в {os.path.abspath(output_dir)}")
+                out_path = os.path.join(output_dir, filename)
+
+                with open(out_path, "wb") as out_file:
+                    data = temp.read(size)
+                    out_file.write(data)
 
 if __name__ == "__main__":
     import urllib3
@@ -286,7 +278,7 @@ if __name__ == "__main__":
         version = input(f"Введите версию {comp['name']} (оставьте пустым для значения по умолчанию '{comp['version']}'): ").strip()
         if version == "":
             version = comp['version']
-        
+
         page_url = f"{BASE_URL}/version_files?nick={comp['nick']}&ver={version}"
         component_pages.append((page_url, comp['name']))
 
@@ -301,7 +293,7 @@ if __name__ == "__main__":
     print("\n=== Поиск и обработка EFD-файлов в distr ===")
     for filename in os.listdir(DOWNLOAD_DIR):
         if filename.lower().endswith('.zip'):
-            cf_filename = filename.removesuffix(".zip") + ".cf"
+            cf_filename = filename.split("_")[0].lower() + ".cf"
             zip_path = os.path.join(DOWNLOAD_DIR, filename)
             print(f"Проверяем ZIP: {filename}")
             try:
@@ -314,11 +306,25 @@ if __name__ == "__main__":
                             efd_temp = os.path.join(DOWNLOAD_DIR, name)
                             with open(efd_temp, "wb") as f:
                                 f.write(efd_data)
-                            
-                            extract_efd(efd_temp, cf_filename, DOWNLOAD_DIR)
-                            
+
+                            extracted_dir = os.path.join(DOWNLOAD_DIR, "tmp_extracted")
+                            extract_efd(efd_temp, extracted_dir)
+                            os.remove(efd_temp)
+                            os.remove(zip_path)
+
+                            for extracted_filename in os.listdir(extracted_dir):
+                                if extracted_filename == "1cv8.cf":
+                                    print(f"Копирую {extracted_filename} в {cf_filename}")
+                                    shutil.copy(os.path.join(extracted_dir, extracted_filename), os.path.join(DOWNLOAD_DIR, cf_filename))
+                            shutil.rmtree(extracted_dir)
+
                             if os.path.exists(efd_temp):
                                 os.remove(efd_temp)
                             break
+
+
+
             except Exception as e:
                 print(f"  Ошибка обработки {filename}: {e}")
+
+    print(f"\nФайлы конфигураций извлечены в {os.path.abspath(DOWNLOAD_DIR)}")
