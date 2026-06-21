@@ -15,9 +15,9 @@ if ls /mnt/*.cf 1> /dev/null 2>&1; then
     chmod 777 -R /mnt/*.cf
 fi
 
-if ls /mnt/*.dt 1> /dev/null 2>&1; then
-    chmod 777 -R /mnt/*.dt
-fi
+#if ls /mnt/*.dt 1> /dev/null 2>&1; then
+#    chmod 777 -R /mnt/*.dt
+#fi
 
 chmod 777 -R /volumes
 echo '/var/dumps/%e.%t.%p.core' > /proc/sys/kernel/core_pattern
