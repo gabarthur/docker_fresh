@@ -9,7 +9,7 @@ else
     DEBUG_1C="-debug -http"
 fi
 
-chmod 777 -R /var/dumps
+#chmod 777 -R /var/dumps
 
 if ls /mnt/*.cf 1> /dev/null 2>&1; then
     chmod 777 -R /mnt/*.cf
