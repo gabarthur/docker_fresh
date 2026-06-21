@@ -21,7 +21,7 @@ docker_compose_str = 'docker-compose -f workdir/docker-compose.yml '
 work_dir = '/out_files/workdir/'
 work_dir_other = work_dir + 'mnt/other-files/'
 local_work_dir = helper.replace_sep(helper.this_path + 'workdir/')
-path_to_1c = ''
+path_to_1c = '/opt/1c/'
 
 
 class colors:
@@ -429,16 +429,16 @@ def down_containers():
 
     call(docker_compose_str + 'down', remote=False)
 
-@print_description
-def get_path_to_1c():
-    """Getting path to 1C"""
+#@print_description
+#def get_path_to_1c():
+#    """Getting path to 1C"""
 
-    global path_to_1c
-    cmd = "docker run --rm fresh/core sh -c \"find / -name '1cv8c' | sed 's/1cv8c//g'\""
-    pipe = subprocess.PIPE
-    p = subprocess.Popen(cmd, shell=True, stdin=pipe, stdout=pipe, stderr=pipe, close_fds=True)
-    path_to_1c = p.stdout.read().decode('utf-8').strip()
-    print('path to 1C: ' + path_to_1c)
+#    global path_to_1c
+#    cmd = "docker run --rm fresh/core sh -c \"find / -name '1cv8c' | sed 's/1cv8c//g'\""
+#    pipe = subprocess.PIPE
+#    p = subprocess.Popen(cmd, shell=True, stdin=pipe, stdout=pipe, stderr=pipe, close_fds=True)
+#    path_to_1c = p.stdout.read().decode('utf-8').strip()
+#    print('path to 1C: ' + path_to_1c)
 
 global_start_time = datetime.now()
 print('{}Fresh is starting{} at {}'.format(colors.GREEN, colors.WHITE, global_start_time))
@@ -448,7 +448,9 @@ new_server = '-new' in sys.argv
 global_debug = '-debug' in sys.argv
 
 set_full_host_name(new_server)
-get_path_to_1c()
+#get_path_to_1c()
+#проверочный вывод path_to_1c
+print('path to 1C: ' + path_to_1c)
 helper.init(path_to_1c)
 
 if new_server:

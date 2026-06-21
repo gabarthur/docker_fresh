@@ -102,7 +102,7 @@ services:
     image: fresh/core
     hostname: web.HOSTNAMEREPLACE
     container_name: web.HOSTNAMEREPLACE
-    command: web
+    command: apache2ctl -D FOREGROUND
     volumes:
       - ./artifacts/web/log:/var/log/1c
       - ./artifacts/web/www/a/:/var/www/a/
