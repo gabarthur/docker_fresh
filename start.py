@@ -54,7 +54,7 @@ class ProgressThread(threading.Thread):
 
     def _spin(self):
 
-        while not self._stopevent.isSet():
+        while not self._stopevent.is_set():
             for t in ['   ', '.  ', '.. ', '...']:
                 print(self.desc, t, end='\r')
                 time.sleep(0.5)
@@ -278,7 +278,7 @@ def renew_docker_compose():
 
     call('cp /out_files/docker-compose_pattern.yml /out_files/workdir/docker-compose.yml')
     call('sh -c "sed -i \'s/HOSTNAMEREPLACE/{}/\' {}/*.yml"'.format(host_name, work_dir))
-    call('sh -c "sed -i \'s/PATH_TO_1C_REPLACE/{}/\' {}/*.yml"'.format(path_to_1c.replace('/','\/'), work_dir))
+    call('sh -c "sed -i \'s/PATH_TO_1C_REPLACE/{}/\' {}/*.yml"'.format(path_to_1c.replace('/','\\/'), work_dir))
 
 
 @print_description
