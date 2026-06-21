@@ -67,7 +67,7 @@ services:
     image: fresh/core
     hostname: srv.HOSTNAMEREPLACE
     container_name: srv.HOSTNAMEREPLACE
-    command: srv+cli
+    command: sh /server.sh srv+cli
     volumes:
       - 1c_pg_socket:/tmp/postgresql/socket
       - 1c_server_data:/var/lib/1c/data

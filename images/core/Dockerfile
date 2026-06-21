@@ -5,6 +5,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 ARG DISTR_VERSION
 
 COPY ./images/core/entrypoint.sh /entrypoint.sh
+COPY ./images/core/server.sh /server.sh
 
 RUN --mount=type=bind,source=./distr,target=/tmp/distr_full \
     set -e && \
