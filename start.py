@@ -463,7 +463,7 @@ if new_server:
 
 # start db srv ras web gate containers
 call(docker_compose_str + 'up -d db srv ras web gate s3', remote=False, silent=False)
-wait_postgres()
+#wait_postgres()
 
 if new_server:
     create_bucket()
