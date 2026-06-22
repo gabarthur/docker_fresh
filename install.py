@@ -34,7 +34,7 @@ for comp in COMPONENTS:
     if comp['nick'] == 'Platform85':
         platform_ver = comp['version']
     if comp['nick'] == 'AddCompPostgre':
-        postgre_ver = comp['version'].removesuffix('.1C')
+        postgre_ver = comp['version'].split('.')[0]
 '''    if comp['nick'] == 'CollaborationSystem':
         cs_ver = comp['version']
     if comp['nick'] == 'esb':
