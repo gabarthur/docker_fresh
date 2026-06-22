@@ -1,8 +1,6 @@
 FROM fresh/debian
 
 ARG VERSION
-ARG SUBVERSION
-ARG RELEASE
 
 RUN --mount=type=bind,source=./distr,target=/tmp/distr_full \
     set -e && \
