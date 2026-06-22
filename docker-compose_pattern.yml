@@ -68,6 +68,13 @@ services:
     hostname: srv.HOSTNAMEREPLACE
     container_name: srv.HOSTNAMEREPLACE
     command: sh /server.sh srv+cli
+    environment:
+      - DATA_1C=/var/lib/1c/data
+      - LOGS_1C=/var/log/1c
+      - DISPLAY=:99
+      - AGENT_PORT=1540
+      - AGENT_REGPORT=1541
+      - AGENT_RANGE=1560:1591
     volumes:
       - 1c_pg_socket:/tmp/postgresql/socket
       - 1c_server_data:/var/lib/1c/data
@@ -76,7 +83,6 @@ services:
       - /tmp/.aksusb:/tmp/.aksusb
       - ../licenses_1c:/var/1C/licenses
       - ../conf/core:PATH_TO_1C_REPLACEconf
-
     ports:
       - 1540-1541:1540-1541
       - 1538:1538

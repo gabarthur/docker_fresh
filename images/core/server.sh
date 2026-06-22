@@ -19,9 +19,9 @@ fi
 #    chmod 777 -R /mnt/*.dt
 #fi
 
-chmod 777 -R /volumes
-echo '/var/dumps/%e.%t.%p.core' > /proc/sys/kernel/core_pattern
-ulimit -c unlimited
+#chmod 777 -R /volumes
+#echo '/var/dumps/%e.%t.%p.core' > /proc/sys/kernel/core_pattern
+#ulimit -c unlimited
 
 if [ "$1" = 'srv' ]
 then
