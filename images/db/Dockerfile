@@ -1,4 +1,4 @@
-FROM fresh/debian
+FROM debian:latest
 
 ARG VERSION
 
