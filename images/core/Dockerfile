@@ -17,7 +17,8 @@ RUN --mount=type=bind,source=./distr,target=/tmp/distr_full \
     #mkdir /executor-server && \
     #unzip -qq latest.zip -d /executor-server && \
     echo "deb https://snapshot.debian.org/archive/debian/20231201T000000Z/ trixie main" | tee -a /etc/apt/sources.list && \
-    apt-get -y update && \
+    apt-get -y -o Acquire::Check-Valid-Until=false update && \
+    #apt-get -y update && \
     apt-get install libwebkit2gtk-4.0-37 libjavascriptcoregtk-4.0-18 && \
     apt-get install -y --no-install-recommends apache2 xvfb x11vnc sudo nano python3 libodbc2 odbc-postgresql net-tools icewm xfce4 gdb libxt6 libglib2.0-0 libgtk-3-0 libsoup-gnome2.4-1 libenchant-2-2 libgstreamer-gl1.0-0 libharfbuzz-icu0 iproute2 chromium python3-selenium dbus wmctrl ssh imagemagick gstreamer1.0-plugins-bad && \
     #libwebkit2gtk-4.1-0 libglu1-mesa
