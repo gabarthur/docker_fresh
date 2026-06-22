@@ -16,8 +16,11 @@ RUN --mount=type=bind,source=./distr,target=/tmp/distr_full \
     #wget --no-verbose https://s3.1c709.ru/builds/executor_server/latest.zip && \
     #mkdir /executor-server && \
     #unzip -qq latest.zip -d /executor-server && \
+    echo "deb https://snapshot.debian.org/archive/debian/20231201T000000Z/ trixie main" | sudo tee -a /etc/apt/sources.list && \
     apt-get -y update && \
-    apt-get install -y --no-install-recommends apache2 xvfb x11vnc sudo nano python3 libodbc2 odbc-postgresql net-tools icewm xfce4 gdb libxt6 libglib2.0-0 libgtk-3-0 libsoup-gnome2.4-1 libenchant-2-2 libgstreamer-gl1.0-0 libharfbuzz-icu0 iproute2 libwebkit2gtk-4.1-0 chromium python3-selenium dbus wmctrl ssh imagemagick gstreamer1.0-plugins-bad libglu1-mesa && \
+    apt-get install libwebkit2gtk-4.0-37 libjavascriptcoregtk-4.0-18 && \
+    apt-get install -y --no-install-recommends apache2 xvfb x11vnc sudo nano python3 libodbc2 odbc-postgresql net-tools icewm xfce4 gdb libxt6 libglib2.0-0 libgtk-3-0 libsoup-gnome2.4-1 libenchant-2-2 libgstreamer-gl1.0-0 libharfbuzz-icu0 iproute2 chromium python3-selenium dbus wmctrl ssh imagemagick gstreamer1.0-plugins-bad && \
+    #libwebkit2gtk-4.1-0 libglu1-mesa
     ln -sf /usr/lib/x86_64-linux-gnu/libwebkit2gtk-4.1.so.0 /usr/lib/x86_64-linux-gnu/libwebkit2gtk-4.0.so.37 && \
     ln -sf /usr/lib/x86_64-linux-gnu/libjavascriptcoregtk-4.1.so.0 /usr/lib/x86_64-linux-gnu/libjavascriptcoregtk-4.0.so.18 && \
 # OneScript
