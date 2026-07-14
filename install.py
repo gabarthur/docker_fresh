@@ -35,6 +35,8 @@ for comp in COMPONENTS:
         platform_ver = comp['version']
     if comp['nick'] == 'AddCompPostgre':
         postgre_ver = comp['version'].split('.')[0]
+    if comp['nick'] == 'EnterpriseLicenseTools':
+        license_tools_ver = comp['version']
 '''    if comp['nick'] == 'CollaborationSystem':
         cs_ver = comp['version']
     if comp['nick'] == 'esb':
@@ -79,6 +81,7 @@ for image in images:
     if image.name == 'core':
         command_to_run.append('--build-arg')
         command_to_run.append('DISTR_VERSION=' + platform_ver)
+        command_to_run.append( 'LICENSE_TOOLS_VERSION=' + license_tools_ver)
 #    if image.name == 'cs':
 #        command_to_run.append('--build-arg')
 #        command_to_run.append('DISTR_VERSION=' + cs_ver)

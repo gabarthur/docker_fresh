@@ -3,6 +3,7 @@ FROM fresh/debian
 ENV DEBIAN_FRONTEND=noninteractive
 
 ARG DISTR_VERSION
+ARG LICENSE_TOOLS_VERSION
 
 COPY ./images/core/entrypoint.sh /entrypoint.sh
 COPY ./images/core/server.sh /server.sh
@@ -28,7 +29,7 @@ RUN --mount=type=bind,source=./distr,target=/tmp/distr_full \
     /tmp/core/platform/setup-full-$DISTR_VERSION-x86_64.run --mode unattended --enable-components client_full,server,ws,ru,uk,pl,vi,it,ro && \
 # License Tools
     mkdir /tmp/core/license_tools && \
-    tar -xf /tmp/distr_full/1c_enterprise_license_tools_0.15.0_2_linux_x86_64.tar.gz -C /tmp/core/license_tools && \
+    tar -xf /tmp/distr_full/1c_enterprise_license_tools_$LICENSE_TOOLS_VERSION_linux_x86_64.tar.gz -C /tmp/core/license_tools && \
     /tmp/core/license_tools/1ce-installer-cli install --ignore-signature-warnings && \
 # Misc
     update-ca-certificates && \
