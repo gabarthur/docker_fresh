@@ -31,7 +31,7 @@ COMPONENTS = [
     },
     {
         "nick": "AddCompPostgre",
-        "version": "17.8-1.1C",
+        "version": "18.3-5.1C",
         "name": "PostgreSQL"
     },
     {
