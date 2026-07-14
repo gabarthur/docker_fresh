@@ -36,7 +36,8 @@ for comp in COMPONENTS:
     if comp['nick'] == 'AddCompPostgre':
         postgre_ver = comp['version'].split('.')[0]
     if comp['nick'] == 'EnterpriseLicenseTools':
-        license_tools_ver = comp['version']
+        version_parts = comp['version'].split('.')
+        license_tools_ver = f"{version_parts[0]}.{version_parts[1]}.{version_parts[2]}{version_parts[3]}"
 '''    if comp['nick'] == 'CollaborationSystem':
         cs_ver = comp['version']
     if comp['nick'] == 'esb':
