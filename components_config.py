@@ -36,7 +36,7 @@ COMPONENTS = [
     },
     {
         "nick": "EnterpriseLicenseTools",
-        "version": "0.15.0.2",
+        "version": "0.15.1.7",
         "name": "Инструменты для работы с лицензиями"
     },
     {
