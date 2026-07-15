@@ -23,10 +23,10 @@ RUN --mount=type=bind,source=./distr,target=/tmp/distr_full \
     wget --no-verbose -O /tmp/core/onescript-engine.deb https://oscript.io/downloads/1_7_0/x64/onescript-engine_1.7.0_all.deb && \
     apt-get -y install /tmp/core/onescript-engine.deb && \
 # Axiom JRE
-    apt-get -y install /tmp/distr_full/axiomjdk_jre_pro17.0.1715_linux_amd64_full.deb&& \
+    apt-get -y install /tmp/distr_full/axiomjdk_jre_pro17.0.1715_linux_amd64_full.deb && \
 # Platform
     unzip /tmp/distr_full/server64_8_5_1_1302.zip -d /tmp/core/platform && \
-    /tmp/core/platform/setup-full-$DISTR_VERSION-x86_64.run --mode unattended --enable-components client_full,server,ws,ru,uk,pl,vi,it,ro && \
+    /tmp/core/platform/setup-full-$DISTR_VERSION-x86_64.run --mode unattended --enable-components client_full,server,liberica_jre,ws,ru,uk,pl,vi,it,ro && \
 # License Tools
     mkdir /tmp/core/license_tools && \
     tar -xf /tmp/distr_full/1c_enterprise_license_tools_${LICENSE_TOOLS_VERSION}_linux_x86_64.tar.gz -C /tmp/core/license_tools && \
