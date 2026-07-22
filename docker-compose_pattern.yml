@@ -115,6 +115,9 @@ services:
       - ./artifacts/web/www/int/:/var/www/int/
       - ./artifacts/web/conf/apache2.conf:/etc/apache2/apache2.conf
       - ./mnt:/mnt
+    environment:
+      - APACHE_RUN_USER=usr1cv8
+      - APACHE_RUN_GROUP=grp1cv8
     depends_on:
       - srv
 
