@@ -25,11 +25,6 @@ COMPONENTS = [
         "name": "1С:Шина"
     },
     {
-        "nick": "SMTL21",
-        "version": "2.1.1.38",
-        "name": "Библиотека технологии сервиса"
-    },
-    {
         "nick": "AddCompPostgre",
         "version": "18.3-5.1C",
         "name": "PostgreSQL"
