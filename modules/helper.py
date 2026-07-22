@@ -171,7 +171,7 @@ def disable_safe_mode(host_name, ib_name, action):
     command.append('-t')
     command.append(container_name)
     command.append('{}1cv8'.format(path_to_1c))
-    command.append('ENTERPRICE')
+    command.append('ENTERPRISE')
     command.append('/S')
     command.append('"srv\\{}"'.format(ib_name))
     command.append('/Execute')
