@@ -13,6 +13,6 @@ RUN \
     apt-get -y clean
 
 ENV LANG=ru_RU.utf8
-ENV DISPLAY=localhost:99.0
+ENV DISPLAY=:99
 
 ADD ./images/debian/fonts/msttcorefonts.tar.gz /usr/share/fonts/truetype/msttcorefonts/
