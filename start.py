@@ -297,7 +297,7 @@ def create_bucket():
     call('mkdir /out_files/workdir/artifacts/s3/files')
 
 @print_description
-def publish_sevises():
+def publish_services():
     """Publish services"""
 
     for ib_data in info_base_list:
@@ -467,7 +467,7 @@ wait_postgres()
 
 if new_server:
     create_bucket()
-    publish_sevises()
+    publish_services()
     prepare_bases()
     create_db_site()
     create_db_forum()
