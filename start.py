@@ -328,8 +328,6 @@ def publish_services():
     call('docker exec web.{} chown -R usr1cv8:grp1cv8 /var/www'.format(host_name), remote=False)
     call('docker exec web.{} /usr/sbin/apachectl graceful'.format(host_name), remote=False)
 
-
-
 @print_description
 def set_full_host_name(is_new):
     """Set full hostname"""
