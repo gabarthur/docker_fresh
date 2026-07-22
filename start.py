@@ -267,7 +267,7 @@ def renew_workdir():
     call('rm -rf /out_files/workdir')
     call('mkdir -p {}mnt'.format(work_dir))
     call('mkdir -p {}artifacts/web/conf'.format(work_dir))
-    call('sh -c "cp /out_files/conf/web/httpd.conf {}artifacts/web/conf/httpd.conf"'.format(work_dir))
+    call('sh -c "cp /out_files/conf/web/apache2.conf {}artifacts/web/conf/apache2.conf"'.format(work_dir))
     call('sh -c "cp /out_files/distr/*.cf {}mnt/"'.format(work_dir))
     call('sh -c "cp /out_files/distr/*.cfe {}mnt/"'.format(work_dir))
 

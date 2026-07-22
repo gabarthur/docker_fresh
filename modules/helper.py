@@ -60,7 +60,7 @@ def web_publish_command(host_name, conf_name, internal, descriptor, base_name=''
     else:
         command.append('"Srvr=srv;Ref={};"'.format(conf_name))
     command.append('-confpath')
-    command.append('"/etc/httpd/conf/httpd.conf"')
+    command.append('"/etc/apache2/apache2.conf"')
     command.append('-descriptor')
     command.append('"/mnt/other-files/vrd/{}.vrd"'.format(descriptor))
     return command
