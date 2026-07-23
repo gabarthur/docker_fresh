@@ -325,7 +325,6 @@ def publish_services():
         'extreg', 'sm;Usr=ExtReg;Pwd=' + sup_password)), remote=False)
 
     # restart Apache
-    call('docker exec web.{} chown -R usr1cv8:grp1cv8 /var/www'.format(host_name), remote=False)
     call('docker exec web.{} /usr/sbin/apachectl graceful'.format(host_name), remote=False)
 
 @print_description

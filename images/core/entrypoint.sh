@@ -16,7 +16,7 @@ fi
 if [ "$CONTAINER_NAME" = 'srv' ]
 then
     echo "Starting Executor in $CONTAINER_NAME"
-    chown -R usr1cv8:grp1cv8 ${COREDATA} ${CORELOGS} ${EXECUTOR_DATA} ${EXECUTOR_HOME} ${LIC_DATA} ${VOLUMES_PATH} ${MNT_PATH} ${DUMP_PATH}
+    chown -R usr1cv8:grp1cv8 ${COREDATA} ${CORELOGS} ${LIC_DATA} ${MNT_PATH} #${EXECUTOR_DATA} ${EXECUTOR_HOME} ${VOLUMES_PATH} ${DUMP_PATH}
     if [ ! -f "${EXECUTOR_DATA}/Linux_Server_Start.sh" ]
     then
         exec gosu usr1cv8 ragent -debug -http -d ${COREDATA}
@@ -37,7 +37,7 @@ then
 elif [ "$CONTAINER_NAME" = 'web' ]
 then
     echo "Starting Executor in $CONTAINER_NAME"
-    chown -R www-data:www-data ${CORELOGS} ${FRESH} ${EXECUTOR_DATA} ${EXECUTOR_HOME}
+    chown -R www-data:www-data ${CORELOGS} #${EXECUTOR_DATA} ${EXECUTOR_HOME} ${FRESH}
     if [ ! -f "${EXECUTOR_DATA}/Linux_Server_Start.sh" ]
     then
         exec apachectl -DFOREGROUND

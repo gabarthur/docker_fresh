@@ -75,6 +75,7 @@ services:
       - AGENT_PORT=1540
       - AGENT_REGPORT=1541
       - AGENT_RANGE=1560:1591
+      - CONTAINER_NAME=srv
     volumes:
       - 1c_pg_socket:/tmp/postgresql/socket
       - 1c_server_data:/var/lib/1c/data
@@ -97,6 +98,8 @@ services:
     hostname: ras.HOSTNAMEREPLACE
     container_name: ras.HOSTNAMEREPLACE
     command: PATH_TO_1C_REPLACEras cluster --port=1545 srv:1540
+    environment:
+      - CONTAINER_NAME=ras
     volumes:
       - ./artifacts/ras/log:/var/log/1c
       - ./mnt:/mnt
@@ -109,15 +112,14 @@ services:
     hostname: web.HOSTNAMEREPLACE
     container_name: web.HOSTNAMEREPLACE
     command: apache2ctl -D FOREGROUND
+    environment:
+      - CONTAINER_NAME=web
     volumes:
       - ./artifacts/web/log:/var/log/1c
       - ./artifacts/web/www/a/:/var/www/a/
       - ./artifacts/web/www/int/:/var/www/int/
       - ./artifacts/web/conf/apache2.conf:/etc/apache2/apache2.conf
       - ./mnt:/mnt
-    environment:
-      - APACHE_RUN_USER=usr1cv8
-      - APACHE_RUN_GROUP=grp1cv8
     depends_on:
       - srv
 
