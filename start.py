@@ -122,7 +122,6 @@ def call(command, remote=True, debug=False, action='', measure_duration=False, s
         stderr = subprocess.PIPE
 
     start_time = datetime.now()
-    print("RUN: ", ' '.join(commands))
     result = subprocess.call(' '.join(commands), shell=True, stdout=stdout, stderr=stderr)
     end_time = datetime.now() - start_time
 
@@ -332,9 +331,7 @@ def publish_services():
         'extreg', 'sm;Usr=ExtReg;Pwd=' + sup_password)), remote=False)
 
     # restart Apache
-    call('docker exec web.{} ps -ef | grep apache'.format(host_name), remote=False)
     call('docker exec web.{} /usr/sbin/apachectl graceful'.format(host_name), remote=False)
-    call('docker exec web.{} ps -ef | grep apache'.format(host_name), remote=False)
 
 @print_description
 def set_full_host_name(is_new):
@@ -429,7 +426,6 @@ def enable_job(base_name, user):
 
     call('docker exec -t ras.{} deployka scheduledjobs unlock -rac /opt/1c/rac -db {} -db-user "{}" '.format(host_name, base_name, user),
         remote=False)
-    time.sleep(30)
 
 @print_description
 def down_containers():
