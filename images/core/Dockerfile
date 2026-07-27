@@ -4,6 +4,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 ARG DISTR_VERSION
 ARG LICENSE_TOOLS_VERSION
+ARG DISTR_VERSION_FOR_ZIP=${DISTR_VERSION//./_}
 
 COPY ./images/core/entrypoint.sh /entrypoint.sh
 COPY ./images/core/server.sh /server.sh
@@ -25,7 +26,7 @@ RUN --mount=type=bind,source=./distr,target=/tmp/distr_full \
 # Axiom JRE
     apt-get -y install /tmp/distr_full/axiomjdk_jre_pro17.0.1715_linux_amd64_full.deb && \
 # Platform
-    unzip /tmp/distr_full/server64_8_5_1_1302.zip -d /tmp/core/platform && \
+    unzip /tmp/distr_full/server64_$DISTR_VERSION_FOR_ZIP.zip -d /tmp/core/platform && \
     /tmp/core/platform/setup-full-$DISTR_VERSION-x86_64.run --mode unattended --enable-components client_full,server,liberica_jre,ws,ru,uk,pl,vi,it,ro && \
 # License Tools
     mkdir /tmp/core/license_tools && \
