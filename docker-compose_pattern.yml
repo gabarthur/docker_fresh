@@ -136,6 +136,11 @@ services:
     image: fresh/site
     hostname: site.HOSTNAMEREPLACE
     container_name: site.HOSTNAMEREPLACE
+    environment:
+      JAVA_OPTS: -Xmx256M -XX:+UseSerialGC -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:5005
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/site?ApplicationName=site
+      SPRING_DATASOURCE_USERNAME: site
+      SPRING_DATASOURCE_PASSWORD: 12345Qwerty
     volumes:
       - ./artifacts/site/searchIndex:/var/www/content/searchIndex
       - ./artifacts/site/site_files:/var/www/content/site_files
