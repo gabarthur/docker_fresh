@@ -68,7 +68,22 @@ def web_publish_command(host_name, conf_name, internal, descriptor, base_name=''
 def get_out_file_name_command(action, ib_name):
     return '/Out "/mnt/{}_{}.out"'.format(action, ib_name)
 
-def create_ib_command(host_name, ib_name, file_name, job_block, action):
+def create_ib_command(host_name, ib_name, job_block, action):
+
+    container_name = 'srv.{}'.format(host_name)
+
+    command = []
+    command.append('docker')
+    command.append('exec')
+    command.append('-t')
+    command.append(container_name)
+    command.append('{}1cv8'.format(path_to_1c))
+    command.append('CREATEINFOBASE')
+    command.append('"Srvr=srv;Ref={0};DBMS=PostgreSQL;DBSrvr=db;DB={0};DBUID=postgres;LicDstr=Y;Locale=ru_RU;CrSQLDB=Y;SchJobDn={1};"'.format(ib_name, job_block))
+    command.append(get_out_file_name_command(action, ib_name))
+    return command
+
+def load_cfg_command(host_name, ib_name, file_name, action):
 
     full_path = '/mnt/{}'.format(file_name)
     container_name = 'srv.{}'.format(host_name)
@@ -80,12 +95,12 @@ def create_ib_command(host_name, ib_name, file_name, job_block, action):
     command.append('-t')
     command.append(container_name)
     command.append('{}1cv8'.format(path_to_1c))
-    command.append('CREATEINFOBASE')
-    #command.append('"Srvr=srv;Ref={0};DBMS=PostgreSQL;DBSrvr=/tmp/postgresql/socket;DB={0};DBUID=postgres;LicDstr=Y;Locale=ru_RU;CrSQLDB=Y;SchJobDn={1};"'.format(
-    command.append('"Srvr=srv;Ref={0};DBMS=PostgreSQL;DBSrvr=db;DB={0};DBUID=postgres;LicDstr=Y;Locale=ru_RU;CrSQLDB=Y;SchJobDn={1};"'.format(
-        ib_name, job_block))
-    command.append('/UseTemplate')
+    command.append('DESIGNER')
+    command.append('/S')
+    command.append('"srv\\{}"'.format(ib_name))
+    command.append('/LoadCfg')
     command.append('/tmp/{}'.format(file_name))
+    command.append('/UpdateDBCfg')
     command.append(get_out_file_name_command(action, ib_name))
     return command
 

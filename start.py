@@ -160,10 +160,17 @@ def prepare_new_ib(ib_name, int_name, conf_file_name, job_block):
     job_dn_str = 'Y' if job_block else 'N'
 
     action = 'create_ib'
-    result = call(' '.join(helper.create_ib_command(host_name, ib_name, conf_file_name, job_dn_str, action)),
+    result = call(' '.join(helper.create_ib_command(host_name, ib_name, job_dn_str, action)),
          remote=False,
          action='Creating ' + ib_name,
          measure_duration=True)
+    check_call_work(result, action, ib_name)
+
+    action = 'load_config'
+    result = call(' '.join(helper.load_cfg_command(host_name, ib_name, conf_file_name, action)),
+            remote=False,
+            action='Loading configuration to ' + ib_name,
+            measure_duration=True)
     check_call_work(result, action, ib_name)
 
     action = 'install_control_ext'
