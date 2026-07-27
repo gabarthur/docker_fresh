@@ -13,4 +13,9 @@ ENV \
     SERVER_TOMCAT_ACCESSLOG_ENABLED=TRUE \
     SERVER_TOMCAT_ACCESSLOG_DIRECTORY=/var/log/site/
 
+RUN \
+    apt-get -y update ;\
+    apt-get -y upgrade ;\
+    apt-get -y install wget
+
 CMD java $JAVA_OPTS -jar /usr/share/site/site.war
