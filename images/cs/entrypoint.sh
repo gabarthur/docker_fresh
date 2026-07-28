@@ -9,7 +9,7 @@ if [ ! -d "$PGDATA" ]; then
     echo "Postgres - creating a database cluster"
     mkdir "$PGDATA"
     chown -R postgres:postgres "$PGDATA"
-    gosu postgres initdb
+    gosu postgres initdb --locale=ru_RU.UTF-8
     echo "synchronous_commit = off" >> "$PGDATA/postgresql.conf"
     exec gosu postgres postgres &
     until psql -h localhost -U "postgres" -c '\q'; do
@@ -18,7 +18,7 @@ if [ ! -d "$PGDATA" ]; then
     done
     echo "Postgres is up"
     gosu postgres psql -c "CREATE USER cs WITH PASSWORD 'cs-pass';"
-    gosu postgres psql -c "CREATE DATABASE cs_db ENCODING='UTF8' LC_CTYPE='ru_RU.utf8';"
+    gosu postgres psql -c "CREATE DATABASE cs_db ENCODING='UTF8' LC_CTYPE='ru_RU.utf8' TEMPLATE=template0;"
     gosu postgres psql -d cs_db -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
     gosu postgres psql -c 'GRANT ALL PRIVILEGES ON DATABASE cs_db TO cs;'
 else
