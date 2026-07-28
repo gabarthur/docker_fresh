@@ -473,7 +473,7 @@ if new_server:
     delete_volumes()
 
 # start db srv ras web gate containers
-call(docker_compose_str + 'up -d db srv ras web gate s3', remote=False, silent=False)
+call(docker_compose_str + 'up -d db srv ras web gate s3 cs esb', remote=False, silent=False)
 wait_postgres()
 
 if new_server:

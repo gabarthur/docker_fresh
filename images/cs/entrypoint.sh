@@ -18,9 +18,9 @@ if [ ! -d "$PGDATA" ]; then
     done
     echo "Postgres is up"
     gosu postgres psql -c "CREATE USER cs WITH PASSWORD 'cs-pass';"
-    gosu postgres psql -c "CREATE DATABASE cs_db ENCODING='UTF8' LC_CTYPE='ru_RU.utf8' TEMPLATE=template0;"
+    gosu postgres psql -c "CREATE DATABASE cs_db OWNER cs ENCODING='UTF8' LC_CTYPE='ru_RU.utf8' TEMPLATE=template0;"
     gosu postgres psql -d cs_db -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
-    gosu postgres psql -c 'GRANT ALL PRIVILEGES ON DATABASE cs_db TO cs;'
+    gosu postgres psql -d cs_db -c 'GRANT USAGE, CREATE ON SCHEMA public TO cs;'
 else
     chown -R postgres:postgres "$PGDATA"
     exec gosu postgres postgres &

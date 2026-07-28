@@ -1,10 +1,10 @@
-FROM eclipse-temurin:26-jre-noble
+FROM eclipse-temurin:17-jre-noble
 
 ARG DISTR_VERSION
 
 RUN --mount=type=bind,source=./distr,target=/tmp/distr_full \
     apt-get update && \
-    apt-get -y install --no-install-recommends ca-certificates locales curl gosu gawk postgresql postgresql-contrib && \
+    apt-get -y install --no-install-recommends ca-certificates locales curl gosu gawk postgresql-16 postgresql-contrib-16 && \
     mkdir /tmp/cs && \
     tar -xvf /tmp/distr_full/1c_cs_*.tar.gz -C /tmp/cs && \
     /tmp/cs/1ce-installer-cli install --ignore-signature-warnings 1c-cs --components 1c-cs-server-small,1c-cs-hazelcast,1c-cs-elasticsearch,1c-enterprise-ring && \
@@ -19,7 +19,7 @@ RUN --mount=type=bind,source=./distr,target=/tmp/distr_full \
     chown -R usr1ce /opt
 
 ENV LANG=ru_RU.utf8
-ENV PATH=$PATH:/opt/1C/1CE/components/1c-enterprise-ring-0.19.5+12-x86_64/:/usr/lib/postgresql/13/bin/
+ENV PATH=$PATH:/opt/1C/1CE/components/1c-enterprise-ring-0.19.5+12-x86_64/:/usr/lib/postgresql/16/bin/
 ENV INSTANCE=/var/cs
 ENV PGDATA=$INSTANCE/pgdata
 
