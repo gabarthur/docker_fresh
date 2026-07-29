@@ -77,6 +77,8 @@ for image in images:
     command_to_run = [
         'docker',
         'build',
+        '--platform',
+        'linux/amd64',
         '-t',
         'fresh/' + image.name]
     if image.name == 'core':
