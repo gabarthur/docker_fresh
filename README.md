@@ -15,6 +15,9 @@
 	- [Python 3+](https://www.python.org/downloads/ "Python 3+")
 	- [Docker. Инструкция по установке](https://docs.docker.com/engine/install/ "Docker. Инструкция по установке")
 	- [Docker Compose. Инструкция по установке](https://docs.docker.com/compose/install/ "Docker Compose. Инструкция по установке")
+	
+*При использовании Docker Desktop на MacOS необходимо использовать Docker VMM в качестве менеджера ВМ для корректной сборки используемых образов. (Settings - General - Virtual Machine Options)*
+
 
 ## Использование команды docker без sudo на linux  
 Для использования на ОС семейства linux команды docker без sudo необходимо добавить пользователя в группу docker.  
