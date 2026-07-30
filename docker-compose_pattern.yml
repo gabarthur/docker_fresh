@@ -128,7 +128,7 @@ services:
     hostname: cs.HOSTNAMEREPLACE
     container_name: cs.HOSTNAMEREPLACE
     volumes:
-      - ./artifacts/cs:/var/cs
+      - cs_data:/var/cs
     environment:
       - JAVA_TOOL_OPTIONS=-Xmx1024m
 
@@ -192,3 +192,4 @@ volumes:
   1c_pg_data:
   1c_pg_socket:
   1c_server_data:
+  cs_data:
