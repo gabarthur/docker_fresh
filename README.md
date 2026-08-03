@@ -162,7 +162,7 @@ sudo python3 start.py
 Активация программных лицензий выполняется с помощью утилиты **ring**, которая присутствует в образе **core**.
 Пример строки активации лицензии
 ```bash
-docker run --rm -it -v /Users/wizaxxx/Documents/projects/docker_fresh/licenses_1c:/var/1C/licenses fresh/core bash -l -c 'ring license activate --first-name "myname" --middle-name "mymiddlename" --last-name "mylastname" --email "myemail@email.com" --country "Russia" --zip-code "101000" --town "Moscow" --street "mystree" --house "myhouse" --apartment "myapart" --serial "myRegNumber" --pin "MyPIN" --send-statistics "false"'
+docker run -it --rm --hostname srv.newstand.1cfresh-dev.ru -v ./licenses_1c:/var/1C/licenses fresh/core bash -l -c 'JAVA_HOME=/opt/1cv8/x86_64/8.5.1.1302/jre /opt/1C/1CE/components/1c-enterprise-ring-0.20.0+4-x86_64/ring license activate --first-name "myname" --middle-name "mymiddlename" --last-name "mylastname" --email "myemail@email.com" --country "Russia" --zip-code "101000" --town "Moscow" --street "mystree" --house "myhouse" --apartment "myapart" --serial "myRegNumber" --pin "MyPIN" --send-statistics "false"'
 ```
 Где 
 `-v /Users/wizaxxx/Documents/projects/docker_fresh/licenses_1c:/var/1C/licenses`
