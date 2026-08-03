@@ -2,6 +2,7 @@ services:
 
   db:
     image: fresh/db
+    platform: linux/amd64
     hostname: db.HOSTNAMEREPLACE
     container_name: db.HOSTNAMEREPLACE
     volumes:
@@ -65,6 +66,7 @@ services:
 
   srv:
     image: fresh/core
+    platform: linux/amd64
     hostname: srv.HOSTNAMEREPLACE
     container_name: srv.HOSTNAMEREPLACE
     command: sh /server.sh srv+cli
@@ -95,6 +97,7 @@ services:
 
   ras:
     image: fresh/core
+    platform: linux/amd64
     hostname: ras.HOSTNAMEREPLACE
     container_name: ras.HOSTNAMEREPLACE
     command: PATH_TO_1C_REPLACEras cluster --port=1545 srv:1540
@@ -109,6 +112,7 @@ services:
 
   web:
     image: fresh/core
+    platform: linux/amd64
     hostname: web.HOSTNAMEREPLACE
     container_name: web.HOSTNAMEREPLACE
     command: apache2ctl -D FOREGROUND
@@ -125,6 +129,7 @@ services:
 
   cs:
     image: fresh/cs
+    platform: linux/amd64
     hostname: cs.HOSTNAMEREPLACE
     container_name: cs.HOSTNAMEREPLACE
     volumes:
@@ -134,6 +139,7 @@ services:
 
   site:
     image: fresh/site
+    platform: linux/amd64
     hostname: site.HOSTNAMEREPLACE
     container_name: site.HOSTNAMEREPLACE
     environment:
@@ -155,6 +161,7 @@ services:
 
   forum:
     image: fresh/forum
+    platform: linux/amd64
     hostname: forum.HOSTNAMEREPLACE
     container_name: forum.HOSTNAMEREPLACE
     volumes:
@@ -168,6 +175,7 @@ services:
 
   gate:
     image: fresh/gate
+    platform: linux/amd64
     hostname: gate.HOSTNAMEREPLACE
     container_name: gate.HOSTNAMEREPLACE
     volumes:
@@ -177,6 +185,7 @@ services:
 
   esb:
     image: fresh/esb
+    platform: linux/amd64
     hostname: esb.HOSTNAMEREPLACE
     container_name: esb.HOSTNAMEREPLACE
     ports:
