@@ -5,7 +5,6 @@ import sys
 import json
 import threading
 import time
-import codecs
 from datetime import datetime
 
 host_name = '.1cfresh-dev.ru'
@@ -135,7 +134,7 @@ def call(command, remote=True, debug=False, action='', measure_duration=False, s
 def get_configurations_data():
     """Get configuration data"""
     is_fail = False
-    with codecs.open('other_files/params.json', 'r', 'utf-8') as json_file:
+    with open('other_files/params.json', 'r', encoding='utf-8') as json_file:
         data = json.load(json_file)
         for ib_data in data['ИнформационныеБазы']:
             if not os.path.isfile('distr/{}'.format(ib_data['ИмяФайлаКонфигурации'])):
