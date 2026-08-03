@@ -393,7 +393,6 @@ def configurate_site():
     """Configurate site settings"""
 
     call(' '.join(helper.edit_site_settings(host_name, sup_password)), remote=False)
-    call('docker exec -t web.{0} curl https://{0}/settings/finish_configuration'.format(host_name), remote=False)
     call(' '.join(helper.enable_manual_registration(host_name)), remote=False)
     call(' '.join(helper.enable_openid(host_name)), remote=False)
     call(' '.join(helper.add_solution(
@@ -405,6 +404,7 @@ def configurate_site():
         possibilities='"БТС"',
         title='"Библиотека технологии сервиса"'
     )), remote=False)
+    call('docker exec -t web.{0} curl https://{0}/settings/finish_configuration'.format(host_name), remote=False)
 
 
 @print_description
