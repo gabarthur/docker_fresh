@@ -247,8 +247,8 @@ def prepare_bases():
             conf_file_name=sm_ib[ib_prop.conf_file],
             job_block=sm_ib[ib_prop.job]
         )
-    if ib_prop.job:
-            enable_job(ib_data[ib_prop.name], ib_data[ib_prop.adm])
+    if sm_ib[ib_prop.job]:
+            enable_job(sm_ib[ib_prop.name], sm_ib[ib_prop.adm])
 
 @print_description
 def renew_nginx_files():
