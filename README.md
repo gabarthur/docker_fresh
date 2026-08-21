@@ -47,6 +47,14 @@
 - [**Docker** — инструкция по установке](https://docs.docker.com/engine/install/)
 - [**Docker Compose** — инструкция по установке](https://docs.docker.com/compose/install/)
 
+### Python-зависимости
+
+```bash
+pip install -r requirements.txt
+```
+
+Зависимости: `requests`, `beautifulsoup4`.
+
 > ⚠️ **macOS:** Используйте Docker VMM в качестве менеджера ВМ (Settings → General → Virtual Machine Options) для корректной сборки образов.
 
 ### Linux: запуск docker без sudo
@@ -68,6 +76,7 @@ docker_fresh/
 ├── start.py                     # Развертывание и запуск стенда
 ├── components_config.py         # Конфигурация компонентов
 ├── docker-compose_pattern.yml   # Шаблон docker-compose
+├── requirements.txt             # Python-зависимости
 ├── README.md                    # Эта справка
 │
 ├── modules/                     # Модули для сборки образов
