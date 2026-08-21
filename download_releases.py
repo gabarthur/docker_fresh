@@ -265,9 +265,6 @@ def extract_efd(efd_path: str, output_dir):
                     out_file.write(data)
 
 if __name__ == "__main__":
-    import urllib3
-    urllib3.disable_warnings(urllib3.exceptions.NotOpenSSLWarning)
-
     print("=== Авторизация на releases.1c.ru ===")
     username = input("Введите логин (обычно email): ").strip()
     password = getpass.getpass("Введите пароль: ")
