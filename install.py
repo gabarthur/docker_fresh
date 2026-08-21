@@ -85,6 +85,8 @@ for image in images:
         command_to_run.append('--build-arg')
         command_to_run.append('DISTR_VERSION=' + platform_ver)
         command_to_run.append('--build-arg')
+        command_to_run.append('DISTR_VERSION_FOR_ZIP=' + platform_ver.replace('.', '_'))
+        command_to_run.append('--build-arg')
         command_to_run.append('LICENSE_TOOLS_VERSION=' + license_tools_ver)
 #    if image.name == 'cs':
 #        command_to_run.append('--build-arg')

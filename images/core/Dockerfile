@@ -4,7 +4,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 ARG DISTR_VERSION
 ARG LICENSE_TOOLS_VERSION
-ARG DISTR_VERSION_FOR_ZIP=${DISTR_VERSION//./_}
+ARG DISTR_VERSION_FOR_ZIP
 
 COPY ./images/core/entrypoint.sh /entrypoint.sh
 COPY ./images/core/server.sh /server.sh
