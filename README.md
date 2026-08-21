@@ -70,7 +70,7 @@ sudo usermod -aG docker ${USER}
 ```
 docker_fresh/
 ├── deploy.py                    # Главный скрипт (скачать → собрать → развернуть)
-├── download_releases.py         # Скачивание дистрибутивов 1C с GitHub
+├── download_releases.py         # Скачивание дистрибутивов 1C с releases.1c.ru
 ├── install.py                   # Сборка Docker-образов
 ├── start.py                     # Развертывание и запуск стенда
 ├── components_config.py         # Конфигурация компонентов

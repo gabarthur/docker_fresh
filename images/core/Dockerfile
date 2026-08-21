@@ -5,6 +5,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 ARG DISTR_VERSION
 ARG LICENSE_TOOLS_VERSION
 ARG DISTR_VERSION_FOR_ZIP
+ARG AXIOM_JRE_VERSION=17.0.1715
 
 COPY ./images/core/entrypoint.sh /entrypoint.sh
 COPY ./images/core/server.sh /server.sh
@@ -24,7 +25,7 @@ RUN --mount=type=bind,source=./distr,target=/tmp/distr_full \
     wget --no-verbose -O /tmp/core/onescript-engine.deb https://oscript.io/downloads/1_7_0/x64/onescript-engine_1.7.0_all.deb && \
     apt-get -y install /tmp/core/onescript-engine.deb && \
 # Axiom JRE
-    apt-get -y install /tmp/distr_full/axiomjdk_jre_pro17.0.1715_linux_amd64_full.deb && \
+    apt-get -y install /tmp/distr_full/axiomjdk_jre_pro${AXIOM_JRE_VERSION}_linux_amd64_full.deb && \
 # Platform
     unzip /tmp/distr_full/server64_$DISTR_VERSION_FOR_ZIP.zip -d /tmp/core/platform && \
     /tmp/core/platform/setup-full-$DISTR_VERSION-x86_64.run --mode unattended --enable-components client_full,server,liberica_jre,ws,ru,uk,pl,vi,it,ro && \

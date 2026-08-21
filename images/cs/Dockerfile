@@ -19,8 +19,14 @@ RUN --mount=type=bind,source=./distr,target=/tmp/distr_full \
     chown -R usr1ce /opt
 
 ENV LANG=ru_RU.utf8
-ENV PATH=$PATH:/opt/1C/1CE/components/1c-enterprise-ring-0.19.5+12-x86_64/:/usr/lib/postgresql/16/bin/
 ENV INSTANCE=/var/cs
+ENV PGDATA=$INSTANCE/pgdata
+
+RUN RING_PATH=$(ls -d /opt/1C/1CE/components/1c-enterprise-ring-* | head -1) && \
+    echo "export PATH=$PATH:$RING_PATH" > /etc/profile.d/ring.sh && \
+    chmod +x /etc/profile.d/ring.sh
+
+ENV PATH=$PATH:/usr/lib/postgresql/16/bin/
 ENV PGDATA=$INSTANCE/pgdata
 
 VOLUME $INSTANCE

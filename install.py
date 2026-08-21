@@ -37,7 +37,18 @@ for comp in COMPONENTS:
         postgre_ver = comp['version'].split('.')[0]
     if comp['nick'] == 'EnterpriseLicenseTools':
         version_parts = comp['version'].split('.')
-        license_tools_ver = f"{version_parts[0]}.{version_parts[1]}.{version_parts[2]}{version_parts[3]}"
+        if len(version_parts) >= 4:
+            license_tools_ver = f"{version_parts[0]}.{version_parts[1]}.{version_parts[2]}{version_parts[3]}"
+        else:
+            license_tools_ver = '.'.join(version_parts)
+    if comp['nick'] == 'Axiom17FullJRE':
+        raw = comp['version'].replace('%2b', '+').replace('%2B', '+')
+        # "17.0.17+15" -> "17.0.1715"
+        if '+' in raw:
+            base, suffix = raw.split('+', 1)
+            axiom_jre_ver = base + suffix
+        else:
+            axiom_jre_ver = raw
 '''    if comp['nick'] == 'CollaborationSystem':
         cs_ver = comp['version']
     if comp['nick'] == 'esb':
@@ -88,6 +99,8 @@ for image in images:
         command_to_run.append('DISTR_VERSION_FOR_ZIP=' + platform_ver.replace('.', '_'))
         command_to_run.append('--build-arg')
         command_to_run.append('LICENSE_TOOLS_VERSION=' + license_tools_ver)
+        command_to_run.append('--build-arg')
+        command_to_run.append('AXIOM_JRE_VERSION=' + axiom_jre_ver)
 #    if image.name == 'cs':
 #        command_to_run.append('--build-arg')
 #        command_to_run.append('DISTR_VERSION=' + cs_ver)

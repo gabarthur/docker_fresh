@@ -306,10 +306,15 @@ def create_bucket():
 def publish_services():
     """Publish services"""
 
+    start = time.time()
+    timeout = 120
     while True:
         result = call('docker exec web.{} curl -s http://localhost/ > /dev/null'.format(host_name), remote=False, )
         if result == 0:
             break
+        if time.time() - start > timeout:
+            print(colors.RED, 'Timeout waiting for web service to become available', colors.WHITE)
+            exit(1)
         time.sleep(2)
 
     for ib_data in info_base_list:

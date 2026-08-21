@@ -49,9 +49,9 @@ then
         exit $status
     fi
     while sleep 60; do
-        ps aux | grep [r]agent
+        pgrep -x ragent > /dev/null 2>&1
         RAGENT_STATUS=$?
-        ps aux | grep [Xvfb]
+        pgrep -x Xvfb > /dev/null 2>&1
         XVFB_STATUS=$?
         if [ $RAGENT_STATUS -ne 0 -o $XVFB_STATUS -ne 0 ]; then
             echo "One of the processes has already exited."

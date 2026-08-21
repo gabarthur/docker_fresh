@@ -6,7 +6,7 @@ RUN --mount=type=bind,source=./distr,target=/tmp/distr_full \
     apt-get install -y --no-install-recommends unzip && \
 # Gate install
     unzip /tmp/distr_full/appgate_*.zip -d /tmp/gate && \
-    apt-get install -y /tmp/gate/*.deb || true && \
+    apt-get install -y /tmp/gate/*.deb && \
 # Cleanup
     rm -rf /tmp/gate && \
     apt-get remove -y unzip && \

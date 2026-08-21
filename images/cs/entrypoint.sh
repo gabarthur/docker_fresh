@@ -95,8 +95,8 @@ if [ ! -d "$INSTANCE/cs" ]; then
     ring cs --instance cs websocket set-params --port 9094
     ring cs --instance cs integration set-params --public-url https://$(hostname -f)
     ring cs --instance cs integration set-params --port 8888
-    if [ -n "$PUBLISHER-API-KEY" ]; then
-        ring cs --instance cs push set-params --url https://pushnotifications.1c.com/api/push/v1 --publisher-api-key "$PUBLISHER-API-KEY"
+    if [ -n "${PUBLISHER_API_KEY}" ]; then
+        ring cs --instance cs push set-params --url https://pushnotifications.1c.com/api/push/v1 --publisher-api-key "${PUBLISHER_API_KEY}"
     fi
     gosu usr1ce $CS &
     until curl -sf -X POST -H "Content-Type: application/json" -d "{ \"url\" : \"jdbc:postgresql://localhost:5432/cs_db\", \"username\" : \"cs\", \"password\" : \"cs-pass\", \"enabled\" : true }" -u admin:admin http://localhost:8087/admin/bucket_server; do

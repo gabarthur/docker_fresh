@@ -42,8 +42,8 @@ necessary_components = [
     r"^.*Дистрибутив 1С:Исполнитель \(U\).*$",
     r"^.*Сервер взаимодействия \(64-bit\) Linux$",
     r"^.*Сервер 1С:Шины для ОС Linux$",
-    r"^.*Дистрибутив СУБД PostgreSQL для Debian 13.0 x86 \(64-bit\) одним архивом.*$",
-    r"^.*Дистрибутив СУБД PostgreSQL для Debian 13.0 x86 (64-bit) (дополнительные модули) одним архивом.*$",
+    r"^.*Дистрибутив СУБД PostgreSQL для Debian 13\.0 x86 \(64-bit\) одним архивом.*$",
+    r"^.*Дистрибутив СУБД PostgreSQL для Debian 13\.0 x86 \(64-bit\) \(дополнительные модули\) одним архивом.*$",
     r"^Полный дистрибутив$",
     r"^Клиент 1С:Предприятия \(64-bit\) для DEB-based Linux-систем$",
     r"^Технологическая платформа 1С:Предприятия \(64-bit\) для Linux$",
@@ -159,19 +159,23 @@ def download_file(url: str):
         return
 
     print("Скачиваем файл по ссылке:", url)
+    part_filepath = filepath + ".part"
     try:
         with session.get(url, stream=True, timeout=TIMEOUT) as response:
             response.raise_for_status()
 
-            with open(filepath, "wb") as f:
+            with open(part_filepath, "wb") as f:
                 for chunk in response.iter_content(chunk_size=32*1024):
                     if chunk:
                         f.write(chunk)
 
+        os.rename(part_filepath, filepath)
         size_mb = os.path.getsize(filepath) // (1024 * 1024)
         print("Скачано:", filename, "(" + str(size_mb) + " МБ)")
     except Exception as e:
         print("Ошибка скачивания:", e)
+        if os.path.exists(part_filepath):
+            os.remove(part_filepath)
 
 def download_components_from_page(page_url: str, component_name: str = "компонент"):
     print(f"\n=== Обработка {component_name} ===")

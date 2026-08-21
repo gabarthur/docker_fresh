@@ -192,7 +192,7 @@ services:
       - 9090:9090
     volumes:
       - ./artifacts/esb/data:/var/opt/1C/1CE/instances/1c-enterprise-esb
-      - ./artifacts/mnt:/mnt
+      - ./mnt:/mnt
     environment:
       - JAVA_TOOL_OPTIONS=-Xmx1024m
 
