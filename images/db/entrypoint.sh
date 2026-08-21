@@ -9,10 +9,7 @@ if [ "$1" = 'postgres' ]; then
         echo "listen_addresses = '*'" >> "$PGDATA/postgresql.conf"
         echo "port = 5432" >> "$PGDATA/postgresql.conf"
         echo "synchronous_commit = off" >> "$PGDATA/postgresql.conf"
-        echo "logging_collector = on" >> "$PGDATA/postgresql.conf"
         echo "log_destination = 'stderr'" >> "$PGDATA/postgresql.conf"
-        echo "log_directory = 'log'" >> "$PGDATA/postgresql.conf"
-        echo "log_filename = 'postgresql.log'" >> "$PGDATA/postgresql.conf"
         echo "log_min_messages = warning" >> "$PGDATA/postgresql.conf"
         echo "log_min_error_statement = error" >> "$PGDATA/postgresql.conf"
         echo "log_timezone = 'Europe/Moscow'" >> "$PGDATA/postgresql.conf"
@@ -23,8 +20,7 @@ if [ "$1" = 'postgres' ]; then
         echo "host    all             all             0.0.0.0/0               trust" >> "$PGDATA/pg_hba.conf"
     fi
 
-    exec gosu postgres postgres -c jit=off &
-    tail -F "$PGDATA/log/postgresql.log"
+    exec gosu postgres postgres -c jit=off
 fi
 
 exec "$@"

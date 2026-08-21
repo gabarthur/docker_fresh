@@ -6,7 +6,7 @@ services:
     hostname: db.HOSTNAMEREPLACE
     container_name: db.HOSTNAMEREPLACE
     volumes:
-      - 1c_pg_data:/var/lib/1c/pgdata
+      - 1c_pg_data:/var/lib/postgresql/data
       - 1c_pg_socket:/tmp/postgresql/socket
       - ./mnt:/mnt
       - ../images/site/create_db.psql:/create_db_site.psql
