@@ -435,9 +435,9 @@ def enable_job(base_name, user):
 
 @print_description
 def down_containers():
-    """Down all containers"""
+    """Down all containers and remove volumes"""
 
-    call(docker_compose_str + 'down', remote=False)
+    call(docker_compose_str + 'down -v', remote=False)
 
 #@print_description
 #def get_path_to_1c():
@@ -469,7 +469,6 @@ if new_server:
     renew_nginx_files()
     renew_docker_compose()
     renew_other_files()
-    delete_volumes()
 
 # start db srv ras web gate containers
 call(docker_compose_str + 'up -d db srv ras web gate s3 cs esb', remote=False, silent=False)
