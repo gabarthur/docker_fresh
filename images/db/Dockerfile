@@ -9,10 +9,8 @@ RUN --mount=type=bind,source=./distr,target=/tmp/distr_full \
     apt-get -y install --no-install-recommends curl bzip2 gosu ca-certificates locales && \
 # PostgreSQL
     mkdir /tmp/pgsql && \
-    tar -xf /tmp/distr_full/postgresql_18.3_5_debian_13.0_x86_64_package.tar.bz2 -C /tmp/pgsql && \
-    tar -xf /tmp/distr_full/postgresql_18.3_5_debian_13.0_x86_64_package_addon.tar.bz2 -C /tmp/pgsql && \
-    dpkg -i /tmp/pgsql/*.deb || true && \
-    apt-get install -y -f && \
+    tar -xf /tmp/distr_full/postgresql_*.tar.bz2 -C /tmp/pgsql && \
+    apt-get install -y --allow-downgrades /tmp/pgsql/*.deb && \
 # Clean up
     apt-get remove -y bzip2 && \
     apt-get autoremove -y && \
