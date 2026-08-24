@@ -49,12 +49,12 @@ then
         exit $status
     fi
     while sleep 60; do
-        pgrep -x ragent > /dev/null 2>&1
-        RAGENT_STATUS=$?
-        pgrep -x Xvfb > /dev/null 2>&1
-        XVFB_STATUS=$?
-        if [ $RAGENT_STATUS -ne 0 -o $XVFB_STATUS -ne 0 ]; then
-            echo "One of the processes has already exited."
+        if ! pgrep -x ragent > /dev/null 2>&1; then
+            echo "One of the processes has already exited (ragent)."
+            exit 1
+        fi
+        if ! pgrep -x Xvfb > /dev/null 2>&1; then
+            echo "One of the processes has already exited (Xvfb)."
             exit 1
         fi
     done
