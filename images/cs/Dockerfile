@@ -22,9 +22,8 @@ ENV LANG=ru_RU.utf8
 ENV INSTANCE=/var/cs
 ENV PGDATA=$INSTANCE/pgdata
 
-RUN RING_PATH=$(ls -d /opt/1C/1CE/components/1c-enterprise-ring-* | head -1) && \
-    echo "export PATH=$PATH:$RING_PATH" > /etc/profile.d/ring.sh && \
-    chmod +x /etc/profile.d/ring.sh
+RUN RING_PATH=$(ls -d /opt/1C/1CE/components/1c-enterprise-ring-*/ | head -1) && \
+    ln -s "${RING_PATH}ring" /usr/local/bin/ring
 
 ENV PATH=$PATH:/usr/lib/postgresql/16/bin/
 ENV PGDATA=$INSTANCE/pgdata
