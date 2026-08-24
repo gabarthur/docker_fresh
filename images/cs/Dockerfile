@@ -1,7 +1,5 @@
 FROM eclipse-temurin:17-jre-noble
 
-ARG DISTR_VERSION
-
 RUN --mount=type=bind,source=./distr,target=/tmp/distr_full \
     apt-get update && \
     apt-get -y install --no-install-recommends ca-certificates locales curl gosu gawk postgresql-16 postgresql-contrib-16 && \
@@ -25,8 +23,7 @@ ENV PGDATA=$INSTANCE/pgdata
 RUN RING_PATH=$(ls -d /opt/1C/1CE/components/1c-enterprise-ring-*/ | head -1) && \
     ln -s "${RING_PATH}ring" /usr/local/bin/ring
 
-ENV PATH=$PATH:/usr/lib/postgresql/16/bin/
-ENV PGDATA=$INSTANCE/pgdata
+ENV PATH=$PATH:/usr/lib/postgresql/16/bin
 
 VOLUME $INSTANCE
 
