@@ -49,11 +49,6 @@ for comp in COMPONENTS:
             axiom_jre_ver = base + suffix
         else:
             axiom_jre_ver = raw
-'''    if comp['nick'] == 'CollaborationSystem':
-        cs_ver = comp['version']
-    if comp['nick'] == 'esb':
-        esb_ver = comp['version']
-        break'''
 
 images = []
 images.append(debian.New())
@@ -96,17 +91,9 @@ for image in images:
         command_to_run.append('--build-arg')
         command_to_run.append('DISTR_VERSION=' + platform_ver)
         command_to_run.append('--build-arg')
-        command_to_run.append('DISTR_VERSION_FOR_ZIP=' + platform_ver.replace('.', '_'))
-        command_to_run.append('--build-arg')
         command_to_run.append('LICENSE_TOOLS_VERSION=' + license_tools_ver)
         command_to_run.append('--build-arg')
         command_to_run.append('AXIOM_JRE_VERSION=' + axiom_jre_ver)
-#    if image.name == 'cs':
-#        command_to_run.append('--build-arg')
-#        command_to_run.append('DISTR_VERSION=' + cs_ver)
-#    if image.name == 'esb':
-#        command_to_run.append('--build-arg')
-#        command_to_run.append('DISTR_VERSION=' + esb_ver)
     if image.name == 'db':
         command_to_run.append('--build-arg')
         command_to_run.append('VERSION=' + postgre_ver)

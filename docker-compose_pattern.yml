@@ -7,7 +7,6 @@ services:
     container_name: db.HOSTNAMEREPLACE
     volumes:
       - 1c_pg_data:/var/lib/postgresql/data
-      - 1c_pg_socket:/tmp/postgresql/socket
       - ./mnt:/mnt
       - ../images/site/create_db.psql:/create_db_site.psql
       - ../images/forum/create_db.psql:/create_db_forum.psql
@@ -79,7 +78,6 @@ services:
       - AGENT_RANGE=1560:1591
       - CONTAINER_NAME=srv
     volumes:
-      - 1c_pg_socket:/tmp/postgresql/socket
       - 1c_server_data:/var/lib/1c/data
       - ./artifacts/srv/log:/var/log/1c
       - ./mnt:/mnt
@@ -199,6 +197,5 @@ services:
 
 volumes:
   1c_pg_data:
-  1c_pg_socket:
   1c_server_data:
   cs_data:

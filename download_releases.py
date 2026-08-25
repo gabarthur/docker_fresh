@@ -105,7 +105,6 @@ def get_urls_from_page(url: str) -> list:
         links = soup.find_all("a", href=True)
         urls = {}
         for link in links:
-            #print(link.text.strip(), ":   ", link['href'])
             href = link['href']
             if href.startswith("/version_file") and any(re.fullmatch(pattern, link.text) for pattern in necessary_components):
                 urls[link.text] = href

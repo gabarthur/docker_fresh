@@ -4,7 +4,6 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 ARG DISTR_VERSION
 ARG LICENSE_TOOLS_VERSION
-ARG DISTR_VERSION_FOR_ZIP
 ARG AXIOM_JRE_VERSION=17.0.1715
 
 COPY ./images/core/entrypoint.sh /entrypoint.sh
@@ -15,10 +14,6 @@ RUN --mount=type=bind,source=./distr,target=/tmp/distr_full \
     mkdir /tmp/core && \
     cd /tmp/core && \
 # Dependencies
-    #wget --no-verbose http://ftp.debian.org/debian/pool/contrib/m/msttcorefonts/ttf-mscorefonts-installer_3.8_all.deb && \
-    #wget --no-verbose https://s3.1c709.ru/builds/executor_server/latest.zip && \
-    #mkdir /executor-server && \
-    #unzip -qq latest.zip -d /executor-server && \
     apt-get -y update && \
     apt-get -y install apache2 xvfb x11vnc sudo nano python3 libodbc1 odbc-postgresql net-tools icewm xfce4 gdb libxt6 libglib2.0-0 libgtk-3-0 libsoup-gnome2.4-1 libenchant-2-2 libgstreamer-gl1.0-0 libharfbuzz-icu0 iproute2 libwebkit2gtk-4.0-37 chromium python3-selenium dbus wmctrl gawk && \
 # OneScript
@@ -27,7 +22,7 @@ RUN --mount=type=bind,source=./distr,target=/tmp/distr_full \
 # Axiom JRE
     apt-get -y install /tmp/distr_full/axiomjdk_jre_pro${AXIOM_JRE_VERSION}_linux_amd64_full.deb && \
 # Platform
-    unzip /tmp/distr_full/server64_$DISTR_VERSION_FOR_ZIP.zip -d /tmp/core/platform && \
+    unzip /tmp/distr_full/server64_*.zip -d /tmp/core/platform && \
     /tmp/core/platform/setup-full-$DISTR_VERSION-x86_64.run --mode unattended --enable-components client_full,server,liberica_jre,ws,ru,uk,pl,vi,it,ro && \
 # License Tools
     mkdir /tmp/core/license_tools && \
@@ -64,8 +59,6 @@ RUN --mount=type=bind,source=./distr,target=/tmp/distr_full \
     chmod 0440 /etc/sudoers.d/usr1cv8 && \
     chmod +x /entrypoint.sh
 
-#ADD ./apache2.conf /etc/apache2/apache2.conf
-#ADD ./logcfg.xml /opt/1cv8/conf/logcfg.xml
 
 ENV LANG=ru_RU.UTF-8
 ENV PATH=$PATH:/opt/1c
