@@ -142,7 +142,7 @@ def download_file(url: str):
             match = re.search(r'filename\*?="?([^";]+)', content_disposition)
             if match:
                 filename = match.group(1).strip().strip('"')
-    except:
+    except Exception:
         filename = None
 
     if not filename:
@@ -303,24 +303,25 @@ if __name__ == "__main__":
                     for name in z.namelist():
                         if name.lower().endswith('.efd'):
                             print(f"  Найден EFD: {name}")
+                            efd_filename = os.path.basename(name)
+                            efd_temp = os.path.join(DOWNLOAD_DIR, efd_filename)
+                            if not os.path.abspath(efd_temp).startswith(os.path.abspath(DOWNLOAD_DIR)):
+                                print(f"  Подозрительный путь: {name}")
+                                continue
                             efd_data = z.read(name)
-                            efd_temp = os.path.join(DOWNLOAD_DIR, name)
                             with open(efd_temp, "wb") as f:
                                 f.write(efd_data)
 
                             extracted_dir = os.path.join(DOWNLOAD_DIR, "tmp_extracted")
                             extract_efd(efd_temp, extracted_dir)
                             os.remove(efd_temp)
-                            os.remove(zip_path)
 
                             for extracted_filename in os.listdir(extracted_dir):
                                 if extracted_filename == "1cv8.cf":
                                     print(f"Копирую {extracted_filename} в {cf_filename}")
                                     shutil.copy(os.path.join(extracted_dir, extracted_filename), os.path.join(DOWNLOAD_DIR, cf_filename))
                             shutil.rmtree(extracted_dir)
-
-                            if os.path.exists(efd_temp):
-                                os.remove(efd_temp)
+                            os.remove(zip_path)
                             break
 
 
